@@ -1,0 +1,10 @@
+LERNSPIEL „MASS & MESSBARKEIT“
+
+Online: Lernspiel.html auf der Seite öffnen.
+Offline: Diesen Ordner herunterladen (bei GitHub: „Code“ → „Download ZIP“), entpacken,
+Lernspiel.html öffnen (am besten Chrome oder Edge).
+
+Beim ersten Start fragt das Spiel nach dem Passwort für die Lerninhalte.
+Danach lädt es neue Inhalte und Skript-Fassungen automatisch; dein Spielstand bleibt erhalten.
+Unter ⚙ Inhalte & Spielstand kannst du einen Ordner verbinden, damit der Spielstand
+als Datei (spielstand.json) gespeichert wird.

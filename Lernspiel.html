@@ -1,0 +1,1136 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Maß &amp; Messbarkeit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lib/katex/katex.min.css">
+<style>
+/* Lernspiel-Oberfläche: helles Papier + Tinte-Blau, Fraunces für Überschriften, Inter für Text */
+:root{--bg:#f5f3ee;--panel:#ffffff;--panel2:#faf9f6;--ink:#1c1e24;--muted:#6b707b;--line:#e4e0d6;--accent:#3a57d4;--accent-soft:#e9edfc;--violet:#7a4bd2;--violet-soft:#efe6fb;--ok:#17905a;--ok-soft:#e3f5ec;--bad:#d0433b;--bad-soft:#fbe9e7;--gold:#c98a12;--gold-soft:#fbf1dc;--on-accent:#ffffff;--scrim:rgba(10,12,18,.6);--shadow:0 1px 2px rgba(20,20,30,.05),0 6px 20px rgba(20,20,30,.06);--f-disp:Fraunces,Georgia,serif;--f-text:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161b;--panel:#1d2027;--panel2:#22262e;--ink:#eceef3;--muted:#9aa0ad;--line:#2f333d;--accent:#7d95ff;--accent-soft:#232a45;--violet:#a98bf0;--violet-soft:#2d2442;--ok:#3ccf8a;--ok-soft:#173327;--bad:#ff7a70;--bad-soft:#3a1f1d;--gold:#f0b545;--gold-soft:#3a2f17;--on-accent:#0d1020;--scrim:rgba(0,0,0,.65);--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14161b;--panel:#1d2027;--panel2:#22262e;--ink:#eceef3;--muted:#9aa0ad;--line:#2f333d;--accent:#7d95ff;--accent-soft:#232a45;--violet:#a98bf0;--violet-soft:#2d2442;--ok:#3ccf8a;--ok-soft:#173327;--bad:#ff7a70;--bad-soft:#3a1f1d;--gold:#f0b545;--gold-soft:#3a2f17;--on-accent:#0d1020;--scrim:rgba(0,0,0,.65);--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.55 var(--f-text)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+h1,h2,h3{font-family:var(--f-disp);letter-spacing:-.01em;margin:0 0 .4em;text-wrap:balance}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,label:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.toprow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--violet));color:#fff;display:grid;place-items:center;font:700 22px var(--f-disp);flex:none}
+.ttl{font:700 17px var(--f-disp)}.sub{font-size:12.5px;color:var(--muted)}
+.hstats{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13.5px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;background:var(--panel);border:1px solid var(--line);white-space:nowrap}
+.pill.save{color:var(--muted)}.pill.save.ok{color:var(--ok)}.pill.save.warn{color:var(--gold)}
+.xpbar{width:100px;height:7px;border-radius:9px;background:var(--line);overflow:hidden}.xpbar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--violet));transition:width .5s}
+nav{display:flex;gap:4px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+nav button{border:0;background:none;padding:7px 12px;border-radius:9px;color:var(--muted);font-weight:500;white-space:nowrap}
+nav button.on{background:var(--panel);color:var(--ink);box-shadow:var(--shadow)}
+main{padding-block:22px 60px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);min-width:0}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))}.g3{grid-template-columns:repeat(auto-fill,minmax(min(220px,100%),1fr))}
+.muted{color:var(--muted)}.small{font-size:13px}
+.btn{border:1px solid var(--line);background:var(--panel);padding:8px 14px;border-radius:10px;font-weight:600;transition:.15s}
+.btn:hover{border-color:var(--accent)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.pri:hover{filter:brightness(1.08)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:var(--on-accent)}
+.btn.danger{border-color:var(--bad);color:var(--bad)}
+.btn.danger.fill{background:var(--bad);color:var(--on-accent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hero{display:grid;grid-template-columns:1.3fr 1fr;gap:14px;margin-bottom:14px}
+@media (max-width:760px){.hero{grid-template-columns:1fr}}
+.big{font:700 34px var(--f-disp);font-variant-numeric:tabular-nums}
+.bar{height:9px;border-radius:9px;background:var(--line);overflow:hidden}.bar i{display:block;height:100%;border-radius:9px;transition:width .6s}
+.topic h3{font-size:18px;margin:2px 0 6px}
+.tnum{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.04em}
+.stufe{font-size:12px;padding:2px 8px;border-radius:99px;font-weight:600;white-space:nowrap}
+.s1{background:var(--accent-soft);color:var(--accent)}.s2{background:var(--violet-soft);color:var(--violet)}.s3{background:var(--gold-soft);color:var(--gold)}
+.new{font-size:11px;font-weight:700;padding:2px 7px;border-radius:99px;background:var(--gold-soft);color:var(--gold);letter-spacing:.03em}
+.qcard{max-width:760px;margin:0 auto}
+.qmeta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:12px;font-size:13px;color:var(--muted)}
+.qtext{font-size:17px;margin:4px 0 16px}
+.opts{display:grid;gap:9px}
+.opt{text-align:left;border:1.5px solid var(--line);background:var(--panel2);padding:11px 14px;border-radius:12px;transition:.12s;min-width:0;overflow-x:auto}
+.opt:hover:not(:disabled){border-color:var(--accent);transform:translateY(-1px)}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft)}.opt.bad{border-color:var(--bad);background:var(--bad-soft)}
+.opt:disabled{cursor:default}
+.tfrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tfrow .opt{text-align:center;font-weight:700;padding:16px}
+.fb{margin-top:16px;padding:14px 16px;border-radius:12px;border-left:4px solid}
+.fb.ok{background:var(--ok-soft);border-color:var(--ok)}.fb.bad{background:var(--bad-soft);border-color:var(--bad)}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.match .col{display:grid;gap:8px;align-content:start;min-width:0}
+.mi{border:1.5px solid var(--line);background:var(--panel2);border-radius:10px;padding:9px 11px;text-align:left;font-size:14px;min-width:0;overflow-x:auto}
+.mi.sel{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.mi.done{border-color:var(--ok);background:var(--ok-soft);cursor:default}
+.mi.shake{animation:shake .35s;border-color:var(--bad)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ordwrap{display:grid;gap:12px}
+.zone{min-height:60px;border:1.5px dashed var(--line);border-radius:12px;padding:8px;display:grid;gap:7px}
+.zone .lbl{font-size:12px;color:var(--muted);font-weight:600}
+.step{border:1.5px solid var(--line);background:var(--panel2);border-radius:10px;padding:9px 11px;text-align:left;font-size:14px;display:flex;gap:9px;min-width:0}
+.step>span{min-width:0;overflow-x:auto}
+.step b.n{min-width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:12px;flex:none}
+.step.ok{border-color:var(--ok);background:var(--ok-soft)}.step.bad{border-color:var(--bad);background:var(--bad-soft)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chip{border:1px solid var(--line);background:var(--panel);padding:5px 11px;border-radius:99px;font-size:13px}
+.chip.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.fcard{max-width:720px;margin:0 auto;min-height:260px;display:flex;flex-direction:column}
+.fcard .front{font:700 22px var(--f-disp);margin:6px 0}
+.fcard .back{border-top:1px dashed var(--line);margin-top:14px;padding-top:14px;overflow-x:auto}
+.bg{margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--accent-soft);font-size:14px}
+.bg b{color:var(--accent)}
+.boxes{display:flex;gap:6px;flex-wrap:wrap}
+.box{font-size:12px;padding:3px 9px;border-radius:8px;background:var(--panel2);border:1px solid var(--line)}
+.hearts{font-size:18px;letter-spacing:2px}
+.badge{display:flex;gap:12px;align-items:center}
+.badge .ic{font-size:28px;width:48px;height:48px;border-radius:12px;display:grid;place-items:center;background:var(--panel2);border:1px solid var(--line);flex:none}
+.badge.lock{opacity:.4;filter:grayscale(1)}
+.libitem{padding:14px 0;border-bottom:1px solid var(--line);overflow-x:auto}
+.libitem:last-child{border:0}
+input.search,textarea.inp{width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;margin-bottom:14px}
+textarea.inp{min-height:120px;font:13px/1.45 ui-monospace,Menlo,monospace}
+#toasts{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));display:grid;gap:8px;z-index:50}
+.toast{background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:11px;font-weight:600;font-size:14px;box-shadow:var(--shadow);animation:tin .3s}
+.toast.gold{background:var(--gold);color:var(--on-accent)}
+@keyframes tin{from{opacity:0;transform:translateY(10px)}}
+.timer{font:700 40px var(--f-disp);font-variant-numeric:tabular-nums}
+.blitzq{min-height:90px;font-size:18px;margin:14px 0}
+.blitzwrap.okf{animation:okf .35s}.blitzwrap.badf{animation:badf .35s}
+@keyframes okf{from{box-shadow:0 0 0 4px var(--ok)}}@keyframes badf{from{box-shadow:0 0 0 4px var(--bad)}}
+.plist .pi{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.plist .pi>div{min-width:0}
+.katex{font-size:1.04em}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding-block:2px}
+.foot{margin-top:30px;font-size:12.5px;color:var(--muted);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.linkbtn{background:none;border:0;color:var(--muted);text-decoration:underline;padding:0}
+.refs{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px;font-size:12.5px;color:var(--muted)}
+.refbtn{border:1px solid var(--line);background:var(--panel);color:var(--accent);border-radius:99px;padding:3px 10px;font-size:12.5px;font-weight:600;transition:.12s}
+.refbtn:hover{border-color:var(--accent);background:var(--accent-soft)}
+.refbtn.miss{color:var(--muted);border-style:dashed}
+.peek{border:1px dashed var(--line);background:none;color:var(--muted);border-radius:10px;padding:6px 12px;font-size:13px}
+.peek:hover{border-color:var(--accent);color:var(--accent)}
+.peek.used{border-style:solid;color:var(--gold);border-color:var(--gold)}
+.vw{position:fixed;inset:0;z-index:40;background:var(--scrim);display:flex;align-items:center;justify-content:center;padding:max(12px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(12px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.vwbox{background:var(--panel);border:1px solid var(--line);border-radius:16px;width:min(980px,100%);height:100%;max-height:94vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.vwbar{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.vwbar .ttl2{font:700 16px var(--f-disp)}
+.vwbar .btn{padding:5px 10px}
+.vwchips{display:flex;gap:6px;flex-wrap:wrap;padding:8px 12px 0}
+.vwchips .refbtn.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.vwbody{flex:1;overflow:auto;background:var(--panel2);padding:12px;position:relative}
+.vwpage{position:relative;margin:0 auto;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.18);border-radius:3px}
+.vwpage canvas{display:block;border-radius:3px}
+.vwhl{position:absolute;background:rgba(255,190,30,.20);border-left:4px solid #e89a00;border-radius:4px;pointer-events:none;mix-blend-mode:multiply;animation:hlp 1.6s ease-out}
+@keyframes hlp{0%{background:rgba(255,190,30,.55)}100%{background:rgba(255,190,30,.20)}}
+.vwmsg{max-width:520px;margin:40px auto;text-align:center;color:var(--muted)}
+.spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite;margin:0 auto 10px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.sk-sec{margin-bottom:14px}
+.sk-sec .row{margin-top:8px}
+.confirm{margin-top:12px;padding:14px;border-radius:12px;border:1.5px solid var(--bad);background:var(--bad-soft)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:14px}
+.kv dt{color:var(--muted)}.kv dd{margin:0;font-variant-numeric:tabular-nums}
+.toggle{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:14px}
+.toggle input{width:18px;height:18px;accent-color:var(--accent)}
+.empty{text-align:center;padding:40px 18px}
+.empty .big{font-size:28px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+</head><body>
+<header class="top"><div class="wrap">
+ <div class="toprow">
+  <div class="brand"><div class="logo">μ</div><div><div class="ttl">Maß &amp; Messbarkeit</div><div class="sub" id="subline">Lernspiel · Höhere Analysis</div></div></div>
+  <div class="hstats" id="hdr"></div>
+ </div>
+ <nav id="nav" aria-label="Bereiche"></nav>
+ <div class="small muted" id="idxmsg" hidden style="padding-bottom:8px"></div>
+</div></header>
+<main><div class="wrap" id="main"><div class="card empty"><div class="spin"></div>Lernspiel wird geladen …</div></div></main>
+<div id="toasts" aria-live="polite"></div>
+<input type="file" id="dirin" webkitdirectory multiple hidden>
+<div id="vw" class="vw" hidden><div class="vwbox" role="dialog" aria-label="Skript">
+ <div class="vwbar"><div class="row"><span class="ttl2" id="vwt">Skript</span><span class="small muted" id="vwp"></span><button class="btn" id="vwback">↩ zur markierten Stelle</button></div>
+ <div class="row"><button class="btn" id="vwprev" title="Vorherige Seite (←)" aria-label="Vorherige Seite">‹</button><button class="btn" id="vwnext" title="Nächste Seite (→)" aria-label="Nächste Seite">›</button><button class="btn" id="vwzo" title="Verkleinern" aria-label="Verkleinern">−</button><button class="btn" id="vwzi" title="Vergrößern" aria-label="Vergrößern">+</button><button class="btn pri" id="vwx" title="Schließen (Esc)" aria-label="Schließen">✕</button></div></div>
+ <div class="vwchips" id="vwc"></div>
+ <div class="vwbody" id="vwbody"></div>
+</div></div>
+
+<script src="lib/katex/katex.min.js"></script>
+<script src="lib/katex/auto-render.min.js"></script>
+<script>/* Grundausstattung – Pakete im Ordner „pakete“ haben Vorrang */
+window.LERNSPIEL_GRUNDPAKETE=/*PAKETE-ANFANG*/[]/*PAKETE-ENDE*/;</script>
+<script>
+/* =====================================================================
+   LERNSPIEL (Offline-Fassung). Inhalte kommen aus Aufgabenpaketen
+   (pakete/*.json im Lernspiel-Ordner, dazu eingebaute Grundpakete),
+   das Skript aus skript/*.pdf, der Spielstand aus spielstand.json.
+   Neue Inhalte = neue Paket-Datei in den Ordner legen.
+   ===================================================================== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function wpick(arr,ws){const s=ws.reduce((a,b)=>a+b,0);let r=Math.random()*s;for(let i=0;i<arr.length;i++){r-=ws[i];if(r<=0)return arr[i]}return arr[arr.length-1]}
+function tex(el){if(window.renderMathInElement){try{renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}catch(e){}}}
+function toast(msg,cls=''){const d=document.createElement('div');d.className='toast '+cls;d.innerHTML=msg;$('#toasts').appendChild(d);setTimeout(()=>d.remove(),2800)}
+const LS={get(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+
+/* ======================= INHALTE AUS PAKETEN ======================= */
+let PACKS={};            // id -> Paket
+let TOPICS=[],CARDS=[],QS=[];
+const LS_PACKS='mm_packs_cache_v1',LS_SK='mm_skript_cache_v1',LS_STATE='mm_progress_v1';
+function validPack(p){return p&&typeof p.id==='string'&&Array.isArray(p.topics)&&Array.isArray(p.cards)&&Array.isArray(p.questions)}
+function rebuildContent(){
+ const list=Object.values(PACKS).filter(validPack).sort((a,b)=>(a.order||0)-(b.order||0)||a.id.localeCompare(b.id));
+ const on=list.filter(p=>!(S.off||{})[p.id]);
+ const seenT=new Set();TOPICS=[];CARDS=[];QS=[];
+ for(const p of on){
+  for(const t of p.topics){if(!t||!t.id||seenT.has(t.id))continue;seenT.add(t.id);TOPICS.push({...t,pack:p.id,isNew:isRecent(p.added)})}
+  for(const c of p.cards)if(c&&c.id&&c.t)CARDS.push({...c,pack:p.id});
+  for(const q of p.questions)if(q&&q.id&&q.t&&['mc','tf','match','order'].includes(q.k))QS.push({...q,pack:p.id});
+ }
+ TOPICS.sort((a,b)=>(a.order??0)-(b.order??0));
+ const tids=new Set(TOPICS.map(t=>t.id));CARDS=CARDS.filter(c=>tids.has(c.t));QS=QS.filter(q=>tids.has(q.t));
+}
+function isRecent(d){if(!d)return false;const t=Date.parse(d);return isFinite(t)&&Date.now()-t<10*864e5}
+const topicOf=id=>TOPICS.find(t=>t.id===id)||{id,n:'?',t:id,d:''};
+
+/* ======================= SPIELSTAND ======================= */
+function defState(){return{v:2,xp:0,m:{},q:{},c:{},badges:{},boss:{},blitzBest:0,day:{last:'',n:0},combo:0,bestCombo:0,proofs:{},answered:0,correct:0,lookups:0,off:{},updatedAt:0}}
+let S=Object.assign(defState(),LS.get(LS_STATE)||{});
+const SAVE={timer:null,busy:false,again:false,status:'local',lastOk:0};
+function save(){S.updatedAt=Date.now();LS.set(LS_STATE,S);if(FS.writable){SAVE.status='pending';renderSavePill();clearTimeout(SAVE.timer);SAVE.timer=setTimeout(flushSave,700)}}
+async function flushSave(){
+ if(!FS.writable||!FS.dir)return;
+ if(SAVE.busy){SAVE.again=true;return}
+ SAVE.busy=true;
+ try{const fh=await FS.dir.getFileHandle('spielstand.json',{create:true});const w=await fh.createWritable();await w.write(JSON.stringify(S,null,1));await w.close();SAVE.status='ok';SAVE.lastOk=Date.now()}
+ catch(e){SAVE.status='err';if(e&&e.name==='NotAllowedError'){FS.writable=false;FS.state='need-permission'}}
+ SAVE.busy=false;renderSavePill();
+ if(SAVE.again){SAVE.again=false;flushSave()}
+}
+function renderSavePill(){const el=$('#savepill');if(!el)return;
+ const st=FS.writable?SAVE.status:(FS.state==='need-permission'?'perm':'local');
+ const m={ok:['ok','📁 gespeichert','Dein Spielstand liegt als spielstand.json im Lernspiel-Ordner.'],pending:['','📁 speichert …','Änderungen werden gespeichert.'],err:['warn','⚠ nur im Browser','Schreiben in den Ordner ist gerade nicht möglich – der Stand liegt vorerst im Browser.'],perm:['warn','📁 Ordner freigeben','Klicken, um den Lernspiel-Ordner wieder freizugeben.'],local:['','💾 im Browser','Der Spielstand liegt in diesem Browser. Verbinde den Lernspiel-Ordner, um ihn dort als Datei zu sichern.']}[st]||['','',''];
+ el.className='pill save '+m[0];el.textContent=m[1];el.title=m[2];el.style.cursor=st==='perm'?'pointer':'';el.onclick=st==='perm'?regrantFolder:null}
+function touchDay(){const d=x=>x.toLocaleDateString('sv');const today=d(new Date());if(S.day.last!==today){const y=d(new Date(Date.now()-864e5));S.day.n=S.day.last===y?S.day.n+1:1;S.day.last=today;save()}}
+
+const TITLES=['Erstsemester','Quaderzähler','Würfelsummierer','Jordan-Lehrling','Überdeckungskünstler','Carathéodory-Adept','σ-Algebraiker','Maßtheoretiker','Regularitäts-Profi','Integral-Profi','Lebesgue-Meister'];
+const lvlOf=xp=>Math.floor(Math.sqrt(xp/40))+1;
+const xpFor=l=>40*(l-1)*(l-1);
+const titleOf=l=>TITLES[Math.min(l-1,TITLES.length-1)];
+const M=t=>S.m[t]||0;
+const targetLvl=m=>m<35?1:m<70?2:3;
+const STUFE=['','Grundlagen','Vertiefung','Experte'];
+const barColor=m=>m<35?'var(--accent)':m<70?'var(--violet)':'var(--gold)';
+function updMastery(t,l,ok,f=1){let m=M(t);if(ok)m+=f*(3+3*l)*(1-m/110);else m-=(l===1?7:4);S.m[t]=Math.max(0,Math.min(100,m))}
+function addXP(n){const before=lvlOf(S.xp);S.xp+=Math.round(n);const after=lvlOf(S.xp);if(after>before)toast(`⬆️ Level ${after}: ${titleOf(after)}`,'gold')}
+
+const BADGES=[
+ {id:'first',i:'🎯',n:'Erster Treffer',d:'Erste Frage richtig beantwortet',f:()=>S.correct>=1},
+ {id:'c5',i:'🔥',n:'Fünferkette',d:'5 richtige Antworten in Folge',f:()=>S.bestCombo>=5},
+ {id:'c15',i:'☄️',n:'σ-Kette',d:'15 richtige Antworten in Folge',f:()=>S.bestCombo>=15},
+ {id:'q50',i:'📚',n:'Fleißig',d:'50 Fragen beantwortet',f:()=>S.answered>=50},
+ {id:'q150',i:'🧠',n:'Unermüdlich',d:'150 Fragen beantwortet',f:()=>S.answered>=150},
+ {id:'proof3',i:'🧩',n:'Beweis-Puzzler',d:'3 Beweis-Puzzles gelöst',f:()=>Object.keys(S.proofs).length>=3},
+ {id:'proofAll',i:'🏛️',n:'Beweis-Architekt',d:'Alle Beweis-Puzzles gelöst',f:()=>{const P=QS.filter(q=>q.k==='order');return P.length>0&&P.every(q=>S.proofs[q.id])}},
+ {id:'boss1',i:'👑',n:'Erster Boss',d:'Einen Abschnitts-Boss besiegt',f:()=>Object.keys(S.boss).length>=1},
+ {id:'bossAll',i:'🏆',n:'Lebesgue-Meister',d:'Alle Abschnitts-Bosse besiegt',f:()=>TOPICS.length>0&&TOPICS.every(t=>S.boss[t.id])},
+ {id:'blitz10',i:'⚡',n:'Blitzmerker',d:'10 Punkte in einer Blitzrunde',f:()=>S.blitzBest>=10},
+ {id:'blitz20',i:'🌩️',n:'Lichtgeschwindigkeit',d:'20 Punkte in einer Blitzrunde',f:()=>S.blitzBest>=20},
+ {id:'cards',i:'🗂️',n:'Kartenmeister',d:'20 Karten in Fach 3 oder höher',f:()=>Object.values(S.c).filter(b=>b>=3).length>=20},
+ {id:'expert',i:'🎓',n:'Experte',d:'Ein Abschnitt auf Expertenstufe (≥ 70 %)',f:()=>TOPICS.some(t=>M(t.id)>=70)},
+ {id:'all50',i:'🌐',n:'Allrounder',d:'Alle Abschnitte ≥ 50 %',f:()=>TOPICS.length>0&&TOPICS.every(t=>M(t.id)>=50)},
+ {id:'streak3',i:'📅',n:'Dranbleiber',d:'An 3 Tagen in Folge gelernt',f:()=>S.day.n>=3},
+ {id:'look10',i:'🔎',n:'Quellenkundig',d:'10 Mal im Skript nachgelesen',f:()=>(S.lookups||0)>=10},
+ {id:'int',i:'∫',n:'Erstes Integral',d:'Abschnitt 3.1–3.2 auf 50 % gebracht',f:()=>M('li')>=50},
+ {id:'mono',i:'↗',n:'Monoton konvergent',d:'Abschnitt 3.4 auf 50 % gebracht',f:()=>M('im')>=50}
+];
+function checkBadges(){let ch=false;BADGES.forEach(b=>{if(!S.badges[b.id]&&b.f()){S.badges[b.id]=Date.now();ch=true;toast(`${b.i} Erfolg freigeschaltet: ${b.n}`,'gold')}});return ch}
+
+/* ======================= HEADER & NAVIGATION ======================= */
+let VIEW='home';
+const NAV=[['home','Übersicht'],['train','Training'],['cards','Karteikarten'],['proofs','Beweis-Werkstatt'],['blitz','Blitzrunde'],['lib','Bibliothek'],['skript','📖 Skript'],['badges','Erfolge'],['manage','⚙ Inhalte & Spielstand']];
+function renderHeader(){
+ const l=lvlOf(S.xp),a=xpFor(l),b=xpFor(l+1),p=Math.round(100*(S.xp-a)/(b-a));
+ $('#hdr').innerHTML=`<span class="pill" title="${S.xp} XP">Lv ${l} · ${titleOf(l)}</span><span class="pill"><span class="xpbar"><i style="width:${p}%"></i></span>${S.xp-a}/${b-a} XP</span><span class="pill" title="Richtige Antworten in Folge">🔥 ${S.combo}</span><span class="pill" title="Lerntage in Folge">📅 ${S.day.n}</span><span class="pill save" id="savepill"></span>`;
+ renderSavePill();
+ $('#nav').innerHTML=NAV.map(([k,t])=>`<button data-nav="${k}" class="${VIEW===k?'on':''}">${t}</button>`).join('');
+ const sk=SK&&SK.name?` · Skript: ${esc(SK.label||SK.name)}`:'';$('#subline').innerHTML=`Lernspiel · Höhere Analysis${sk}`;
+}
+function go(v){if(BL.running)stopBlitz(true);VIEW=v;render();window.scrollTo({top:0})}
+document.addEventListener('click',e=>{const n=e.target.closest('[data-nav]');if(n)go(n.dataset.nav)});
+let READY=false;
+function render(){if(!READY)return;renderHeader();const m=$('#main');
+ if(!TOPICS.length&&!['manage','skript','badges'].includes(VIEW)){vEmpty(m);tex(m);return}
+ ({home:vHome,train:vTrain,cards:vCards,proofs:vProofs,blitz:vBlitz,lib:vLib,skript:vSkript,badges:vBadges,manage:vManage})[VIEW](m);tex(m)}
+function vEmpty(m){m.innerHTML=`<div class="card empty"><div class="big">${CLOUD.state==='needpw'?'🔒 Lerninhalte freischalten':'Noch keine Aufgaben geladen'}</div><p class="muted">${CLOUD.state==='needpw'?'🔒 Die Lerninhalte sind mit einem Passwort geschützt. Gib es einmal ein – danach lädt das Spiel alles automatisch.'+pwForm():CLOUD.state==='checking'?'☁ Inhalte werden aus der Cloud geladen …':CLOUD.state==='err'?esc(CLOUD.msg):'Entweder sind alle Pakete ausgeschaltet, oder es wurden noch keine geladen. Verbinde den Lernspiel-Ordner, damit das Spiel die Dateien im Unterordner „pakete“ liest.'}</p><div class="row" style="justify-content:center"><button class="btn pri" onclick="connectFolder()">Lernspiel-Ordner verbinden</button><button class="btn" data-nav="manage">Inhalte verwalten</button></div></div>`}
+
+/* ======================= ÜBERSICHT ======================= */
+function vHome(m){
+ const avg=Math.round(TOPICS.reduce((s,t)=>s+M(t.id),0)/TOPICS.length);
+ const weakest=TOPICS.slice().sort((a,b)=>M(a.id)-M(b.id))[0];
+ const P=QS.filter(q=>q.k==='order'),solvedP=P.filter(q=>S.proofs[q.id]).length;
+ const beat=TOPICS.filter(t=>S.boss[t.id]).length;
+ const banner=FS.state==='need-permission'?`<div class="card" style="margin-bottom:14px;border-color:var(--gold)"><div class="row" style="justify-content:space-between"><div><b>📁 Lernspiel-Ordner wieder freigeben</b><div class="small muted">Damit neue Pakete aus „${esc(FS.name)}“ geladen werden und dein Spielstand dort gespeichert wird.</div></div><button class="btn gold" onclick="regrantFolder()">Freigeben</button></div></div>`
+  :FS.state==='none'?`<div class="card" style="margin-bottom:14px"><div class="row" style="justify-content:space-between"><div><b>📁 Lernspiel-Ordner verbinden</b><div class="small muted">Einmal verbinden: Dann liest das Spiel neue Pakete aus „pakete“, das Skript aus „skript“ und speichert deinen Spielstand im Ordner.</div></div><button class="btn pri" onclick="connectFolder()">${FS.supported?'Verbinden':'Einlesen'}</button></div></div>`:'';
+ const upd=CLOUD.gameNew?`<div class="card" style="margin-bottom:14px;border-color:var(--ok)"><div class="row" style="justify-content:space-between"><div><b>☁ Neue Spielversion ${CLOUD.gameNew.version} verfügbar</b><div class="small muted">${esc(CLOUD.gameNew.notes)} Herunterladen und nur Lernspiel.html (ggf. auch lib) ersetzen – dein Spielstand bleibt erhalten.</div></div><a class="btn pri" style="text-decoration:none" href="${esc(CLOUD.gameNew.url)}" target="_blank" rel="noopener">Herunterladen</a></div></div>`:'';
+ m.innerHTML=banner+upd+`
+ <div class="hero">
+  <div class="card">
+   <div class="muted small">Gesamtfortschritt</div>
+   <div class="big">${avg} %</div>
+   <div class="bar" style="margin:6px 0 14px"><i style="width:${avg}%;background:linear-gradient(90deg,var(--accent),var(--violet))"></i></div>
+   <p class="muted small" style="margin:0 0 12px">Unter 35 % kommen <b>Grundlagen</b>-Fragen, ab 35 % <b>Vertiefung</b>, ab 70 % <b>Expertenfragen</b> mit Beweis-Puzzles. Ab 60 % wird der Abschnitts-Boss freigeschaltet.</p>
+   <div class="row"><button class="btn pri" id="rec">▶ Empfohlen: ${esc(weakest.n)} ${esc(weakest.t)}</button><button class="btn" id="mix">🎲 Gemischtes Training</button></div>
+  </div>
+  <div class="card">
+   <div class="muted small">Statistik</div>
+   <div class="grid" style="grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
+    <div><div class="big" style="font-size:26px">${S.answered}</div><div class="muted small">Fragen beantwortet</div></div>
+    <div><div class="big" style="font-size:26px">${S.answered?Math.round(100*S.correct/S.answered):0} %</div><div class="muted small">Trefferquote</div></div>
+    <div><div class="big" style="font-size:26px">${solvedP}/${P.length}</div><div class="muted small">Beweise gelöst</div></div>
+    <div><div class="big" style="font-size:26px">${beat}/${TOPICS.length}</div><div class="muted small">Bosse besiegt</div></div>
+   </div>
+  </div>
+ </div>
+ <div class="grid g2">${TOPICS.map(t=>{const mm=Math.round(M(t.id)),tl=targetLvl(mm),bossOpen=mm>=60,bt=S.boss[t.id],nq=QS.filter(q=>q.t===t.id).length;
+  return `<div class="card topic"><div class="row" style="justify-content:space-between"><span class="tnum">ABSCHNITT ${esc(t.n)}${t.isNew?' <span class="new">NEU</span>':''}</span><span class="stufe s${tl}">${STUFE[tl]}</span></div>
+  <h3>${esc(t.t)}${bt?' 👑':''}</h3><div class="muted small" style="margin-bottom:10px">${esc(t.d||'')} · ${nq} Aufgaben</div>
+  <div class="row" style="justify-content:space-between;margin-bottom:4px"><span class="small muted">Beherrschung</span><span class="small"><b>${mm} %</b></span></div>
+  <div class="bar"><i style="width:${mm}%;background:${barColor(mm)}"></i></div>
+  <div class="row" style="margin-top:12px"><button class="btn pri" data-train="${t.id}">Training</button><button class="btn" data-cards="${t.id}">Karten</button>
+  <button class="btn ${bossOpen?'gold':''}" data-boss="${t.id}" ${bossOpen?'':'disabled title="Ab 60 % Beherrschung"'}>${bossOpen?'⚔ Boss':'🔒 Boss'}</button></div></div>`}).join('')}</div>
+ <div class="foot"><span>${FS.writable?'Dein Spielstand wird automatisch im Lernspiel-Ordner gespeichert.':'Dein Spielstand wird in diesem Browser gespeichert.'} Unklar? 📖 führt zur Stelle im Skript.</span><button class="linkbtn" data-nav="manage">Spielstand zurücksetzen …</button></div>`;
+ $('#rec').onclick=()=>startSession(weakest.id,'train');
+ $('#mix').onclick=()=>startSession('mix','train');
+ m.querySelectorAll('[data-train]').forEach(b=>b.onclick=()=>startSession(b.dataset.train,'train'));
+ m.querySelectorAll('[data-cards]').forEach(b=>b.onclick=()=>{CS.f=b.dataset.cards;CS.cur=null;go('cards')});
+ m.querySelectorAll('[data-boss]').forEach(b=>b.onclick=()=>startSession(b.dataset.boss,'boss'));
+}
+
+/* ======================= FRAGE-RENDERER ======================= */
+function renderQ(q,box,done){
+ let fired=false;const fin=ok=>{if(!fired){fired=true;done(ok)}};
+ if(q.k==='mc'){
+  const order=shuffle(q.o.map((_,i)=>i));
+  box.innerHTML=`<div class="opts">${order.map(i=>`<button class="opt" data-i="${i}">${q.o[i]}</button>`).join('')}</div>`;
+  box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,ok=i===q.a;box.querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(+x.dataset.i===q.a)x.classList.add('ok')});if(!ok)b.classList.add('bad');fin(ok)});
+ }else if(q.k==='tf'){
+  box.innerHTML=`<div class="tfrow"><button class="opt" data-v="1">✓ Wahr</button><button class="opt" data-v="0">✗ Falsch</button></div>`;
+  box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const v=b.dataset.v==='1',ok=v===q.a;box.querySelectorAll('.opt').forEach(x=>{x.disabled=true;if((x.dataset.v==='1')===q.a)x.classList.add('ok')});if(!ok)b.classList.add('bad');fin(ok)});
+ }else if(q.k==='match'){
+  const rights=shuffle(q.p.map((_,i)=>i));let sel=null,mist=0,cnt=0;
+  box.innerHTML=`<div class="small muted" style="margin-bottom:8px">Wähle links einen Begriff, dann rechts das passende Gegenstück. <span id="mist"></span></div><div class="match"><div class="col">${q.p.map((p,i)=>`<button class="mi" data-l="${i}">${p[0]}</button>`).join('')}</div><div class="col">${rights.map(i=>`<button class="mi" data-r="${i}">${q.p[i][1]}</button>`).join('')}</div></div>`;
+  const L=[...box.querySelectorAll('[data-l]')],Rr=[...box.querySelectorAll('[data-r]')];
+  L.forEach(b=>b.onclick=()=>{if(b.classList.contains('done'))return;L.forEach(x=>x.classList.remove('sel'));b.classList.add('sel');sel=+b.dataset.l});
+  Rr.forEach(b=>b.onclick=()=>{if(sel===null||b.classList.contains('done'))return;const r=+b.dataset.r;
+   if(r===sel){b.classList.add('done');const lb=L[sel];lb.classList.remove('sel');lb.classList.add('done');sel=null;cnt++;if(cnt===q.p.length)fin(mist===0)}
+   else{mist++;b.classList.add('shake');setTimeout(()=>b.classList.remove('shake'),400);box.querySelector('#mist').textContent=`Fehlversuche: ${mist}`}});
+ }else if(q.k==='order'){
+  let pool=shuffle(q.s.map((_,i)=>i));if(pool.every((v,i)=>v===i)&&pool.length>1)pool.reverse();let ans=[];
+  const draw=()=>{
+   box.innerHTML=`<div class="ordwrap"><div class="zone"><span class="lbl">Dein Beweis (klicke einen Schritt, um ihn zurückzulegen)</span>${ans.map((i,k)=>`<button class="step" data-a="${k}"><b class="n">${k+1}</b><span>${q.s[i]}</span></button>`).join('')||'<span class="small muted">noch leer</span>'}</div>
+   <div class="zone"><span class="lbl">Verfügbare Schritte</span>${pool.map(i=>`<button class="step" data-p="${i}"><span>${q.s[i]}</span></button>`).join('')||'<span class="small muted">alle Schritte platziert</span>'}</div>
+   <div class="row"><button class="btn pri" id="chk" ${pool.length?'disabled':''}>Beweis prüfen</button></div></div>`;
+   box.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const i=+b.dataset.p;pool=pool.filter(x=>x!==i);ans.push(i);draw()});
+   box.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{const k=+b.dataset.a;pool.push(ans[k]);ans.splice(k,1);draw()});
+   box.querySelector('#chk').onclick=()=>{const ok=ans.every((v,i)=>v===i);box.querySelectorAll('[data-a]').forEach((b,k)=>{b.disabled=true;b.classList.add(ans[k]===k?'ok':'bad')});box.querySelector('#chk').remove();fin(ok)};
+   tex(box);
+  };draw();
+ }
+ tex(box);
+}
+const refOf=q=>q.src?q.r+', '+q.src:q.r;
+function feedbackHTML(q,ok){
+ let extra='';
+ if(!ok&&q.k==='order')extra=`<div style="margin-top:8px"><b>Richtige Reihenfolge:</b><ol style="margin:6px 0 0;padding-left:20px">${q.s.map(s=>`<li>${s}</li>`).join('')}</ol></div>`;
+ if(!ok&&q.k==='match')extra=`<div class="small" style="margin-top:6px">Für volle Punktzahl alle Paare ohne Fehlversuch zuordnen.</div>`;
+ return `<div class="fb ${ok?'ok':'bad'}"><b>${ok?'Richtig!':'Nicht ganz.'}</b> ${q.e||''}${extra}${refChips(refOf(q),'Im Skript nachlesen:')}</div>`;
+}
+function registerAnswer(q,ok,mult=1,peeked=false){
+ S.answered++;const st=S.q[q.id]||(S.q[q.id]={c:0,w:0});ok?st.c++:st.w++;
+ let gain=0;if(peeked)mult*=0.5;
+ if(ok){S.correct++;S.combo++;S.bestCombo=Math.max(S.bestCombo,S.combo);gain=(6*q.l+2*Math.min(S.combo,10))*mult;if(q.k==='order')S.proofs[q.id]=1}
+ else S.combo=0;
+ updMastery(q.t,q.l,ok,peeked?0.5:1);if(gain)addXP(gain);checkBadges();save();renderHeader();
+ return gain;
+}
+
+/* ======================= TRAINING & BOSS ======================= */
+let SES=null;
+function pickQ(topic,exclude,opt={}){
+ let pool=QS.filter(q=>(topic==='mix'||q.t===topic)&&!exclude.has(q.id)&&(!opt.minL||q.l>=opt.minL));
+ if(!pool.length)return null;
+ const ws=pool.map(q=>{const tl=targetLvl(M(q.t)),d=Math.abs(q.l-tl);let w=d===0?6:d===1?(q.l<tl?2.5:1.2):0.4;const st=S.q[q.id];if(st){if(st.w>st.c)w*=3;else if(st.c>=2&&st.w===0)w*=0.35}else w*=1.4;return w});
+ return wpick(pool,ws);
+}
+function pickNext(){
+ let t=SES.topic,opt=SES.mode==='boss'?{minL:2}:{};
+ if(t==='mix')t=wpick(TOPICS.map(x=>x.id),TOPICS.map(x=>110-M(x.id)));
+ return pickQ(t,SES.seen,opt)||pickQ(t,new Set(),opt)||pickQ(t,new Set());
+}
+function startSession(topic,mode){
+ SES={topic,mode,n:mode==='boss'?6:8,i:0,ok:0,xp:0,lives:3,seen:new Set(),m0:topic==='mix'?null:M(topic),done:false};
+ SES.cur=pickNext();if(!SES.cur){toast('Für diesen Abschnitt gibt es noch keine Aufgaben.');SES=null;return}
+ SES.seen.add(SES.cur.id);go('train');
+}
+function vTrain(m){
+ if(!SES){
+  m.innerHTML=`<div class="card"><h2>Training</h2><p class="muted">Acht adaptive Fragen pro Runde. Schwierigkeit und Auswahl richten sich nach deiner Beherrschung; falsch beantwortete Fragen kommen häufiger wieder.</p>
+  <div class="grid g3" style="margin-top:12px"><button class="btn pri" data-t="mix">🎲 Gemischt (alle Abschnitte)</button>${TOPICS.map(t=>`<button class="btn" data-t="${t.id}">${esc(t.n)} ${esc(t.t)} · ${Math.round(M(t.id))} %</button>`).join('')}</div></div>`;
+  m.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>startSession(b.dataset.t,'train'));return;
+ }
+ if(SES.done){
+  const boss=SES.mode==='boss',won=boss&&SES.lives>0,t=SES.topic==='mix'?null:topicOf(SES.topic);
+  const delta=t?Math.round(M(t.id)-SES.m0):null;
+  m.innerHTML=`<div class="card qcard" style="text-align:center">
+   <div style="font-size:46px">${boss?(won?'👑':'💀'):(SES.ok>=SES.n*0.75?'🎉':SES.ok>=SES.n/2?'👍':'📖')}</div>
+   <h2>${boss?(won?'Boss besiegt!':'Der Boss war stärker'):'Runde beendet'}</h2>
+   <p class="muted">${SES.ok} von ${SES.i} richtig · +${Math.round(SES.xp)} XP${t?` · ${esc(t.t)}: ${Math.round(M(t.id))} % (${delta>=0?'+':''}${delta})`:''}</p>
+   ${boss&&!won?'<p class="small muted">Tipp: Wiederhole die Karteikarten dieses Abschnitts und versuche es erneut.</p>':''}
+   <div class="row" style="justify-content:center;margin-top:10px"><button class="btn pri" id="again">${boss?'Erneut antreten':'Nächste Runde'}</button><button class="btn" id="home">Zur Übersicht</button></div></div>`;
+  $('#again').onclick=()=>startSession(SES.topic,SES.mode);$('#home').onclick=()=>{SES=null;go('home')};return;
+ }
+ const q=SES.cur,t=topicOf(q.t),boss=SES.mode==='boss';
+ m.innerHTML=`<div class="card qcard">
+  <div class="qmeta"><span>${boss?'⚔ BOSS · ':''}${esc(t.n)} ${esc(t.t)}</span><span>${boss?`<span class="hearts">${'❤️'.repeat(SES.lives)}${'🤍'.repeat(3-SES.lives)}</span> · `:''}Frage ${SES.i+1}/${SES.n} · <span class="stufe s${q.l}">${STUFE[q.l]}</span></span></div>
+  <div class="bar" style="margin-bottom:14px"><i style="width:${100*SES.i/SES.n}%;background:${boss?'var(--gold)':'var(--accent)'}"></i></div>
+  ${q.k==='order'?'<div class="tnum" style="margin-bottom:4px">🧩 BEWEIS-PUZZLE</div>':q.k==='match'?'<div class="tnum" style="margin-bottom:4px">🔗 ZUORDNEN</div>':q.k==='tf'?'<div class="tnum" style="margin-bottom:4px">WAHR ODER FALSCH?</div>':''}
+  <div class="qtext">${q.q}</div><div id="qb"></div><div id="fb"></div>
+  <div class="row" style="justify-content:space-between;margin-top:14px"><div class="row"><button class="linkbtn" id="quit">Runde abbrechen</button><button class="peek" id="peek" title="Öffnet die passende Skriptstelle. Eine richtige Antwort bringt dann nur die halben XP.">📖 Unklar? Im Skript nachschlagen (½ XP)</button></div><button class="btn pri" id="next" hidden>Weiter →</button></div></div>`;
+ let peeked=false;
+ $('#peek').onclick=()=>{peeked=true;const b=$('#peek');b.classList.add('used');b.textContent='📖 Skript geöffnet · ½ XP';openRefs(refOf(q),0)};
+ renderQ(q,$('#qb'),ok=>{
+  const pk=$('#peek');if(pk)pk.remove();
+  const g=registerAnswer(q,ok,boss?1.5:1,peeked);SES.xp+=g;if(ok)SES.ok++;else if(boss)SES.lives--;
+  const fb=$('#fb');fb.innerHTML=feedbackHTML(q,ok)+(g?`<div class="small" style="margin-top:6px;color:var(--ok)">+${Math.round(g)} XP${S.combo>=3?` · Kette ×${S.combo}`:''}</div>`:'');tex(fb);
+  const nb=$('#next');nb.hidden=false;SES.i++;
+  const over=SES.i>=SES.n||(boss&&SES.lives<=0);
+  if(boss)m.querySelector('.hearts').innerHTML='❤️'.repeat(SES.lives)+'🤍'.repeat(3-SES.lives);
+  nb.textContent=over?'Ergebnis →':'Weiter →';
+  nb.onclick=()=>{if(over){SES.done=true;if(boss&&SES.lives>0){const first=!S.boss[SES.topic];S.boss[SES.topic]=1;S.m[SES.topic]=Math.min(100,M(SES.topic)+8);addXP(first?80:30);SES.xp+=first?80:30;checkBadges();save()}}else{SES.cur=pickNext();SES.seen.add(SES.cur.id)}render();window.scrollTo({top:0})};
+ });
+ $('#quit').onclick=()=>{SES=null;go('home')};
+}
+
+/* ======================= KARTEIKARTEN ======================= */
+const CS={f:'all',cur:null,rev:false};
+function pickCard(){const pool=CARDS.filter(c=>CS.f==='all'||c.t===CS.f);if(!pool.length)return null;const ws=pool.map(c=>{const b=S.c[c.id]||0;return Math.pow(6-b,2)*(c===CS.cur?0.05:1)});return wpick(pool,ws)}
+function vCards(m){
+ if(CS.f!=='all'&&!TOPICS.some(t=>t.id===CS.f))CS.f='all';
+ if(!CS.cur||!CARDS.includes(CS.cur)||(CS.f!=='all'&&CS.cur.t!==CS.f)){CS.cur=pickCard();CS.rev=false}
+ const pool=CARDS.filter(c=>CS.f==='all'||c.t===CS.f),cnt=[0,0,0,0,0,0];pool.forEach(c=>cnt[S.c[c.id]||0]++);
+ const c=CS.cur;
+ const chips=`<div class="chips"><button class="chip ${CS.f==='all'?'on':''}" data-f="all">Alle</button>${TOPICS.map(x=>`<button class="chip ${CS.f===x.id?'on':''}" data-f="${x.id}">${esc(x.n)} ${esc(x.t)}</button>`).join('')}</div>`;
+ if(!c){m.innerHTML=`<h2>Karteikarten</h2>${chips}<div class="card empty muted">Für diese Auswahl gibt es keine Karten.</div>`;m.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{CS.f=b.dataset.f;CS.cur=null;render()});return}
+ const t=topicOf(c.t);
+ m.innerHTML=`<h2>Karteikarten</h2><p class="muted small">Leitner-System: Gewusste Karten wandern ein Fach höher und kommen seltener, nicht gewusste zurück in Fach 1.</p>
+ ${chips}
+ <div class="boxes" style="margin-bottom:14px">${['Neu','Fach 1','Fach 2','Fach 3','Fach 4','Fach 5'].map((n,i)=>`<span class="box">${n}: <b>${cnt[i]}</b></span>`).join('')}</div>
+ <div class="card fcard"><div class="row" style="justify-content:space-between"><span class="tnum">${esc(t.n)} ${esc(t.t).toUpperCase()}</span><span class="small muted">Fach ${S.c[c.id]||'neu'}</span></div>
+  <div class="front">${esc(c.r)}</div><div class="muted">${esc(c.n)} – Was besagt das? Formuliere es im Kopf, dann aufdecken.</div>
+  ${CS.rev?`<div class="back">${c.b}${c.h?`<div class="bg"><b>Hintergrund:</b> ${c.h}</div>`:''}${refChips(c.src||c.r,'Im Skript:')}</div>
+  <div class="row" style="margin-top:16px"><button class="btn danger" data-rate="0">✗ Nicht gewusst</button><button class="btn" data-rate="1">~ Unsicher</button><button class="btn pri" data-rate="2">✓ Gewusst</button></div>`
+  :`<div style="margin-top:auto;padding-top:18px"><button class="btn pri" id="rev">Aufdecken</button></div>`}
+ </div>`;
+ m.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{CS.f=b.dataset.f;CS.cur=null;render()});
+ const rv=$('#rev');if(rv)rv.onclick=()=>{CS.rev=true;render()};
+ m.querySelectorAll('[data-rate]').forEach(b=>b.onclick=()=>{const r=+b.dataset.rate,box=S.c[c.id]||0;
+  if(r===2){S.c[c.id]=Math.min(5,box+1);addXP(3);S.m[c.t]=Math.min(100,M(c.t)+1.5*(1-M(c.t)/110))}else if(r===1){S.c[c.id]=Math.max(1,box)}else{S.c[c.id]=1}
+  checkBadges();save();CS.cur=pickCard();CS.rev=false;render()});
+}
+
+/* ======================= BEWEIS-WERKSTATT ======================= */
+let PV=null;
+function vProofs(m){
+ const P=QS.filter(q=>q.k==='order');
+ if(PV&&P.find(x=>x.id===PV)){const q=P.find(x=>x.id===PV),t=topicOf(q.t);
+  m.innerHTML=`<div class="card qcard"><div class="qmeta"><span>🧩 ${esc(t.n)} ${esc(t.t)}</span><span class="stufe s3">Beweis-Puzzle</span></div><div class="qtext">${q.q}</div><div id="qb"></div><div id="fb"></div>
+  <div class="row" style="justify-content:space-between;margin-top:14px"><button class="btn" id="back">← Alle Puzzles</button><button class="btn pri" id="again" hidden>Nochmal</button></div></div>`;
+  renderQ(q,$('#qb'),ok=>{const g=registerAnswer(q,ok);const fb=$('#fb');fb.innerHTML=feedbackHTML(q,ok)+(g?`<div class="small" style="margin-top:6px;color:var(--ok)">+${Math.round(g)} XP</div>`:'');tex(fb);$('#again').hidden=false});
+  $('#back').onclick=()=>{PV=null;render()};$('#again').onclick=()=>render();return;
+ }
+ PV=null;
+ m.innerHTML=`<h2>Beweis-Werkstatt</h2><p class="muted">Bringe Beweisschritte aus dem Skript in die richtige Reihenfolge. Achte auf die logischen Abhängigkeiten: Welche Aussage braucht welche Vorarbeit?</p>
+ <div class="card plist">${P.map(q=>{const t=topicOf(q.t);return `<div class="pi"><div><div class="tnum">${esc(t.n)} · ${esc(q.r)}</div><div>${q.q.replace(/^Beweis-Puzzle:\s*/,'')}</div></div><button class="btn ${S.proofs[q.id]?'':'pri'}" data-p="${q.id}">${S.proofs[q.id]?'✓ Wiederholen':'Lösen'}</button></div>`}).join('')||'<p class="muted">Keine Beweis-Puzzles in den aktiven Paketen.</p>'}</div>`;
+ m.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{PV=b.dataset.p;render()});
+}
+
+/* ======================= BLITZRUNDE ======================= */
+const BL={running:false,t:60,score:0,q:null,iv:null,last:null,wrong:[]};
+function nextBlitz(){const TF=QS.filter(q=>q.k==='tf');let q;do{q=TF[Math.floor(Math.random()*TF.length)]}while(q===BL.last&&TF.length>1);BL.last=q;BL.q=q}
+function stopBlitz(silent){clearInterval(BL.iv);BL.running=false;if(BL.score>S.blitzBest){S.blitzBest=BL.score;if(!silent)toast('⚡ Neuer Blitz-Rekord: '+BL.score,'gold')}if(BL.score)addXP(BL.score*3);checkBadges();save();if(!silent)render()}
+function vBlitz(m){
+ if(!QS.some(q=>q.k==='tf')){m.innerHTML='<div class="card empty muted">Keine Wahr/Falsch-Aussagen in den aktiven Paketen.</div>';return}
+ if(!BL.running){
+  m.innerHTML=`<div class="card qcard" style="text-align:center"><div style="font-size:44px">⚡</div><h2>Blitzrunde</h2>
+  <p class="muted">60 Sekunden, nur Wahr/Falsch-Aussagen aus allen Abschnitten. Richtige Antwort: +1 Punkt. Falsche Antwort: −3 Sekunden.</p>
+  <p>Rekord: <b>${S.blitzBest}</b>${BL.score&&BL.t<=0?` · Letzte Runde: <b>${BL.score}</b>`:''}</p>
+  ${BL.wrong.length&&BL.t<=0?`<div style="text-align:left" class="card"><b>Zum Nacharbeiten:</b>${BL.wrong.map(q=>`<div class="libitem small">${q.q}<br><span class="muted">${q.a?'Wahr':'Falsch'} – ${q.e}</span>${refChips(refOf(q),'Im Skript:')}</div>`).join('')}</div>`:''}
+  <button class="btn pri" id="go" style="margin-top:12px">Start</button></div>`;
+  $('#go').onclick=()=>{Object.assign(BL,{running:true,t:60,score:0,wrong:[]});nextBlitz();render();BL.iv=setInterval(()=>{BL.t--;const el=$('#tm');if(el)el.textContent=BL.t;if(BL.t<=0)stopBlitz()},1000)};return;
+ }
+ m.innerHTML=`<div class="card qcard blitzwrap" id="bw"><div class="row" style="justify-content:space-between"><div><span class="muted small">Zeit</span><div class="timer" id="tm">${BL.t}</div></div><div style="text-align:right"><span class="muted small">Punkte</span><div class="timer">${BL.score}</div></div></div>
+  <div class="blitzq">${BL.q.q}</div><div class="tfrow"><button class="opt" data-v="1">✓ Wahr</button><button class="opt" data-v="0">✗ Falsch</button></div></div>`;
+ m.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{const ok=(b.dataset.v==='1')===BL.q.a;
+  if(ok)BL.score++;else{BL.t=Math.max(0,BL.t-3);if(!BL.wrong.includes(BL.q))BL.wrong.push(BL.q)}
+  const st=S.q[BL.q.id]||(S.q[BL.q.id]={c:0,w:0});ok?st.c++:st.w++;
+  if(BL.t<=0){stopBlitz();return}
+  nextBlitz();render();$('#bw').classList.add(ok?'okf':'badf')});
+}
+
+/* ======================= BIBLIOTHEK ======================= */
+let LQ='';
+function vLib(m){
+ m.innerHTML=`<h2>Bibliothek</h2><p class="muted small">Alle Definitionen, Sätze, Lemmata und Beispiele aus den aktiven Paketen – mit Hintergrundwissen und Sprung ins Skript.</p><input class="search" id="s" placeholder="Suchen, z. B. „σ-Algebra“, „Vitali“, „3.12“ …" value="${esc(LQ)}"><div id="ll"></div>`;
+ const draw=()=>{const qq=LQ.toLowerCase();const ll=$('#ll');
+  ll.innerHTML=TOPICS.map(t=>{const cs=CARDS.filter(c=>c.t===t.id&&(!qq||(c.r+' '+c.n+' '+c.b+' '+(c.h||'')).toLowerCase().includes(qq))).map((c,i)=>({c,i,o:cardOrd(c)})).sort((a,b)=>a.o-b.o||a.i-b.i).map(x=>x.c);if(!cs.length)return'';
+   return `<div class="card" style="margin-bottom:14px"><h3>${esc(t.n)} ${esc(t.t)}</h3>${cs.map(c=>`<div class="libitem"><div class="tnum">${esc(c.r)}</div><b>${esc(c.n)}</b><div style="margin-top:4px">${c.b}</div>${c.h?`<div class="bg"><b>Hintergrund:</b> ${c.h}</div>`:''}${refChips(c.src||c.r,'Im Skript:')}</div>`).join('')}</div>`}).join('')||'<p class="muted">Keine Treffer.</p>';tex(ll)};
+ draw();$('#s').oninput=e=>{LQ=e.target.value;draw()};
+}
+
+/* ======================= ERFOLGE ======================= */
+function vBadges(m){
+ const got=BADGES.filter(b=>S.badges[b.id]).length;
+ m.innerHTML=`<h2>Erfolge</h2><p class="muted">${got} von ${BADGES.length} freigeschaltet · Bestkette: ${S.bestCombo} · Blitz-Rekord: ${S.blitzBest}</p>
+ <div class="grid g3">${BADGES.map(b=>`<div class="card badge ${S.badges[b.id]?'':'lock'}"><div class="ic">${b.i}</div><div><b>${b.n}</b><div class="small muted">${b.d}</div></div></div>`).join('')}</div>
+ <h3 style="margin-top:24px">Level-Leiter</h3><div class="card">${TITLES.map((t,i)=>`<div class="row" style="justify-content:space-between;padding:5px 0;${lvlOf(S.xp)===i+1?'font-weight:700;color:var(--accent)':''}"><span>Lv ${i+1} · ${t}</span><span class="small muted">${xpFor(i+1)} XP</span></div>`).join('')}</div>`;
+}
+
+/* ======================= SKRIPT: VERZEICHNIS & VERWEISE ======================= */
+let SK=LS.get(LS_SK);   // {assetId,name,label,pages,index:{label:[page,ord,title?]},uploadedAt}
+let NUM={};
+function rebuildNum(){NUM={};const I=(SK&&SK.index)||{};for(const k in I){const m=k.match(/^(Definition|Satz|Lemma|Korollar|Bemerkung) (\d+\.\d+)$/);if(m)NUM[m[2]]=k}}
+const KINDS={'Def.':'D','Definition':'D','Satz':'D','Lemma':'D','Kor.':'D','Korollar':'D','Bem.':'D','Bemerkung':'D','Bsp.':'B','Beispiel':'B','Kap.':'K','Kapitel':'K','Abschnitt':'A','Ende':'A','Notation':'N','S.':'P','Seite':'P'};
+const LONG={'Def.':'Definition','Kor.':'Korollar','Bem.':'Bemerkung'};
+function parseRefs(r){
+ const I=(SK&&SK.index)||{},out=[],seen=new Set();
+ const add=o=>{if(o&&!seen.has(o.label)){seen.add(o.label);out.push(o)}};
+ const entry=(label,type,extra={})=>{const e=I[label];return{label,type,p:e?e[0]:null,...extra}};
+ let kind='D',word=null,m;
+ const re=/(Definition|Def\.|Satz|Lemma|Korollar|Kor\.|Bemerkung|Bem\.|Beispiel|Bsp\.|Kapitel|Kap\.|Abschnitt|Ende|Notation|Seite|S\.)|(\d+)\.(\d+)(?:\s*[–-]\s*(\d+)\.(\d+))?|(\d+)/g;
+ while((m=re.exec(r||''))){
+  if(m[1]){kind=KINDS[m[1]];word=LONG[m[1]]||m[1];if(kind==='N')add(entry('Notation','page'));continue}
+  if(m[2]){const c=m[2],a=+m[3];
+   if(kind==='A'){const n=c+'.'+a;add(entry('Abschnitt '+n,'sec',{num:n}));continue}
+   const b=m[5]?+m[5]:a;
+   for(let i=a;i<=b;i++){const k=NUM[c+'.'+i]||(kind==='D'&&word&&!m[5]?word+' '+c+'.'+i:null);if(k)add(entry(k,'label'))}
+   continue}
+  if(m[6]){const n=+m[6];
+   if(kind==='B')add(entry('Beispiel '+n,'label'));
+   else if(kind==='K')add(entry('Kapitel '+n,'page'));
+   else if(kind==='P'&&n>=1)add({label:'Seite '+n,type:'page',p:(SK&&SK.pages&&n>SK.pages)?null:n})}
+ }
+ return out}
+const short=o=>o.label.replace('Definition','Def.').replace('Korollar','Kor.').replace('Bemerkung','Bem.').replace('Beispiel','Bsp.');
+function refChips(r,lead){const L=parseRefs(r);if(!L.length)return'';const enc=encodeURIComponent(r);
+ return `<div class="refs"><span>📖 ${lead||'Im Skript:'}</span>${L.map((o,i)=>`<button class="refbtn ${o.p?'':'miss'}" data-ref="${enc}" data-ri="${i}" ${o.p?'':'title="Im hinterlegten Skript nicht gefunden"'}>${short(o)}${o.p?(o.type==='page'&&/^Seite/.test(o.label)?'':' · S. '+o.p):' · fehlt im Skript'}</button>`).join('')}</div>`}
+function cardOrd(c){const L=parseRefs(c.src||c.r);const I=(SK&&SK.index)||{};const e=L.length&&I[L[0].label];return e?e[1]:(L.length&&L[0].p?L[0].p*100000:1e12)}
+function openRefs(r,i){const L=parseRefs(r);if(!L.length){toast('Keine Skriptstelle gefunden');return}openViewer(L,i)}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-ref]');if(b)openRefs(decodeURIComponent(b.dataset.ref),+b.dataset.ri||0)});
+
+/* ======================= SKRIPT-VIEWER (pdf.js) ======================= */
+const VW={list:[],i:0,page:1,zoom:1,tok:0,hl:null};
+let PDFP=null,PDFKEY=null;
+function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>rej(new Error(src));document.head.appendChild(s)})}
+async function loadPdfjs(){const base='lib/pdfjs/';
+ if(!window.pdfjsLib)await loadScript(base+'pdf.min.js');
+ if(!window.pdfjsWorker)await loadScript(base+'pdf.worker.min.js');
+ pdfjsLib.GlobalWorkerOptions.workerSrc=base+'pdf.worker.min.js'}
+async function openPdfData(data){await loadPdfjs();return pdfjsLib.getDocument({data}).promise}
+function getPdf(){
+ const f=SRC.pdf;if(!f)return Promise.reject(new Error('nopdf'));
+ if(PDFP&&PDFKEY===f)return PDFP;
+ PDFKEY=f;PDFP=(async()=>openPdfData(new Uint8Array(await f.arrayBuffer())))();
+ PDFP.catch(()=>{PDFP=null});
+ return PDFP}
+function openViewer(list,i){
+ VW.list=list;VW.i=Math.max(0,Math.min(i||0,list.length-1));VW.hl=list[VW.i];VW.page=VW.hl.p||1;
+ S.lookups=(S.lookups||0)+1;checkBadges();save();
+ $('#vw').hidden=false;document.body.style.overflow='hidden';$('#vwbody').innerHTML='';renderPage()}
+function closeViewer(){$('#vw').hidden=true;document.body.style.overflow='';VW.tok++}
+function drawBar(){
+ const it=VW.list[VW.i],on=it&&it.p&&VW.page===it.p,N=(SK&&SK.pages)||1;
+ $('#vwt').textContent=it&&(on||!it.p)?(/^Seite/.test(it.label)?'Skript':short(it)):'Skript';
+ $('#vwp').textContent=`Seite ${VW.page} / ${N}`;
+ const c=$('#vwc');c.innerHTML=VW.list.length>1?VW.list.map((o,k)=>`<button class="refbtn ${k===VW.i?'on':''} ${o.p?'':'miss'}" data-vi="${k}">${short(o)}${o.p?' · S. '+o.p:' · fehlt'}</button>`).join(''):'';c.hidden=VW.list.length<2;
+ $('#vwback').hidden=!(it&&it.p&&!on&&it.type!=='page');
+ $('#vwprev').disabled=VW.page<=1;$('#vwnext').disabled=VW.page>=N;
+}
+async function renderPage(){
+ const tok=++VW.tok,body=$('#vwbody');drawBar();
+ const it=VW.hl;
+ if(it&&!it.p){
+  body.innerHTML=`<div class="vwmsg"><b>${esc(short(it))} steht nicht im hinterlegten Skript.</b><br>Das Paket bezieht sich vermutlich auf eine neuere Fassung. Lege sie in den Ordner „skript“ – das Spiel liest sie beim nächsten Einlesen automatisch ein.<br><br><button class="btn" id="vwanyway">Trotzdem im Skript blättern</button></div>`;
+  $('#vwanyway').onclick=()=>{VW.hl=null;renderPage()};return}
+ if(!body.querySelector('.vwpage'))body.innerHTML='<div class="vwmsg"><div class="spin"></div>Skript wird geladen …</div>';
+ let doc;
+ try{doc=await getPdf()}catch(e){if(tok!==VW.tok)return;
+  body.innerHTML=e&&e.message==='nopdf'?`<div class="vwmsg"><b>${FS.state==='need-permission'?'Der Lernspiel-Ordner muss erst wieder freigegeben werden.':'Kein Skript gefunden.'}</b><br>${FS.state==='need-permission'?'<button class="btn gold" onclick="regrantFolder().then(renderPage)">Ordner freigeben</button>':'Lege das Skript-PDF in den Ordner „skript“ und verbinde den Lernspiel-Ordner (⚙ Inhalte & Spielstand).'}${it&&it.p?`<br>Die gesuchte Stelle steht auf Seite ${it.p}.`:''}</div>`
+  :`<div class="vwmsg"><b>Das Skript konnte gerade nicht geladen werden.</b><br>Prüfe, ob die PDF-Datei noch im Ordner liegt.${it&&it.p?` Die Stelle steht auf <b>Seite ${it.p}</b>.`:''}<br><br><button class="btn" id="vwretry">Erneut versuchen</button></div>`;
+  const rb=$('#vwretry');if(rb)rb.onclick=renderPage;return}
+ if(VW.page>doc.numPages)VW.page=doc.numPages;
+ const page=await doc.getPage(VW.page);const tc=await page.getTextContent();if(tok!==VW.tok)return;
+ const v1=page.getViewport({scale:1});let x0=Infinity,x1=-Infinity,y0=Infinity,y1=-Infinity;
+ tc.items.forEach(t=>{if(!(t.str||'').trim())return;const tx=pdfjsLib.Util.transform(v1.transform,t.transform),fh=Math.hypot(tx[2],tx[3]);x0=Math.min(x0,tx[4]);x1=Math.max(x1,tx[4]+(t.width||0));y0=Math.min(y0,tx[5]-fh);y1=Math.max(y1,tx[5])});
+ const mg=22;if(!isFinite(x0)){x0=0;x1=v1.width;y0=0;y1=v1.height}
+ x0=Math.max(0,x0-mg);x1=Math.min(v1.width,x1+mg);y0=Math.max(0,y0-mg);y1=Math.min(v1.height,y1+mg);
+ const avail=Math.max(260,body.clientWidth-24),scale=Math.min(avail,880)/(x1-x0)*VW.zoom;
+ const vp=page.getViewport({scale,offsetX:-x0*scale,offsetY:-y0*scale}),W=(x1-x0)*scale,H=(y1-y0)*scale,dpr=Math.min(window.devicePixelRatio||1,3);
+ const cv=document.createElement('canvas');cv.width=Math.floor(W*dpr);cv.height=Math.floor(H*dpr);cv.style.width=W+'px';cv.style.height=H+'px';
+ await page.render({canvasContext:cv.getContext('2d'),viewport:vp,transform:dpr!==1?[dpr,0,0,dpr,0,0]:null}).promise;
+ if(tok!==VW.tok)return;
+ const wrap=document.createElement('div');wrap.className='vwpage';wrap.style.width=W+'px';wrap.appendChild(cv);
+ body.innerHTML='';body.appendChild(wrap);body.scrollTop=0;drawBar();
+ if(it&&it.p===VW.page&&(it.type==='label'||it.type==='sec')){
+  try{const bx=findBox(tc.items,vp,it);
+   if(bx&&it.type==='label'){const ge=greyEnd(cv,dpr,bx.minX-1.1*vp.scale,bx.top+bx.lh*0.5,Math.min(H-2,bx.top+H*0.75));if(ge&&ge>bx.top+bx.lh)bx.h=ge-bx.y+5}
+   if(bx){const h=document.createElement('div');h.className='vwhl';Object.assign(h.style,{left:bx.x+'px',top:bx.y+'px',width:bx.w+'px',height:bx.h+'px'});wrap.appendChild(h);body.scrollTop=Math.max(0,bx.y-60)}}catch(e){}
+ }
+}
+const spRe=s=>s.split('').map(c=>c.replace(/[.*+?^$(){}|[\]\\]/g,'\\$&')).join('\\s*');
+/* Sucht die Überschrift (z.B. „Satz 1.12.“) im Textlayer und markiert die Aussage */
+function findBox(items,vp,it){
+ const U=pdfjsLib.Util;
+ const G=items.map(t=>{const tx=U.transform(vp.transform,t.transform);const fh=Math.hypot(tx[2],tx[3])||Math.abs((t.height||10)*vp.scale);return{x:tx[4],y:tx[5]-fh,b:tx[5],h:fh,w:(t.width||0)*vp.scale,s:t.str||'',eol:!!t.hasEOL}});
+ let txt='';const st=[];G.forEach(g=>{st.push(txt.length);txt+=g.s+(g.eol?' ':'')});
+ const at=pos=>{let lo=0,hi=st.length-1;while(lo<hi){const k=(lo+hi+1)>>1;if(st[k]<=pos)lo=k;else hi=k-1}return lo};
+ let re;
+ if(it.type==='label'){const sp=it.label.indexOf(' ');const w=sp<0?it.label:it.label.slice(0,sp),n=sp<0?'':it.label.slice(sp+1);
+  re=n?new RegExp(spRe(w)+'\\s*'+spRe(n)+'(?!\\s*\\d)(?:\\s*\\([^)]{0,80}\\))?\\s*\\.'):new RegExp(spRe(w))}
+ else re=new RegExp(spRe(it.num)+'(?![\\s.]*\\d)\\s*[A-ZÄÖÜ]');
+ const m=re.exec(txt);if(!m)return null;
+ const g0=G[at(m.index)],top=g0.y,lh=g0.h;
+ const lowest=Math.max(...G.filter(g=>g.s.trim()).map(g=>g.b));
+ let minX=Infinity,maxX=0,maxB=0;
+ G.forEach(g=>{const s=g.s.trim();if(!s)return;if(/^\d+$/.test(s)&&g.b>=lowest-2)return;minX=Math.min(minX,g.x);maxX=Math.max(maxX,g.x+g.w);maxB=Math.max(maxB,g.b)});
+ let end=null;
+ if(it.type==='sec')end=g0.b+lh*0.4;
+ else{
+  const head=/^\s*(Beweis(idee)?\s*\.|(Definition|Satz|Lemma|Korollar|Bemerkung|Beispiel)\s*\d+(\s*\.\s*\d+)?(\s*\([^)]{0,80}\))?\s*\.|\d\s*\.\s*\d\s+[A-ZÄÖÜ]|KAPITEL|Notation\s*\.)/;
+  for(let j=at(m.index+m[0].length-1)+1;j<G.length;j++){const g=G[j];if(!g.s.trim()||g.y<=top+lh*0.8)continue;
+   const ls=G[j-1].eol||g.x<minX+6;
+   if(ls&&head.test(txt.slice(st[j],st[j]+90))){end=g.y-3;break}}
+  if(end===null)end=maxB+4;
+  end=Math.min(end,top+vp.height*0.6);
+ }
+ const pad=6;return{x:minX-pad-4,y:top-pad,w:maxX-minX+2*pad+4,h:Math.max(lh+2*pad,end-top+pad),minX,top,lh}}
+/* Aussagen stehen im Skript in grauen Kästen: deren unteres Ende ist das genaueste Ende der Markierung */
+function greyEnd(cv,dpr,x,y0,y1){
+ try{const X=Math.round(x*dpr),Y0=Math.round(y0*dpr),H=Math.max(1,Math.round((y1-y0)*dpr));
+  const d=cv.getContext('2d').getImageData(X,Y0,1,H).data,grey=i=>{const r=d[4*i],g=d[4*i+1],b=d[4*i+2];return r>200&&r<250&&Math.abs(r-g)<8&&Math.abs(g-b)<8};
+  if(!grey(0))return null;let miss=0;
+  for(let i=1;i<H;i++){if(grey(i))miss=0;else if(++miss>=4)return y0+(i-3)/dpr}
+  return y1}catch(e){return null}}
+
+$('#vwx').onclick=closeViewer;
+$('#vw').addEventListener('click',e=>{if(e.target.id==='vw'){closeViewer();return}const c=e.target.closest('[data-vi]');if(c){VW.i=+c.dataset.vi;VW.hl=VW.list[VW.i];VW.page=VW.hl.p||VW.page;renderPage()}});
+$('#vwprev').onclick=()=>{if(VW.page>1){VW.page--;renderPage()}};
+$('#vwnext').onclick=()=>{if(VW.page<((SK&&SK.pages)||1)){VW.page++;renderPage()}};
+$('#vwzi').onclick=()=>{VW.zoom=Math.min(2.4,+(VW.zoom+0.2).toFixed(1));renderPage()};
+$('#vwzo').onclick=()=>{VW.zoom=Math.max(0.6,+(VW.zoom-0.2).toFixed(1));renderPage()};
+$('#vwback').onclick=()=>{VW.page=VW.list[VW.i].p;renderPage()};
+document.addEventListener('keydown',e=>{if($('#vw').hidden)return;if(e.key==='Escape')closeViewer();else if(e.key==='ArrowRight')$('#vwnext').click();else if(e.key==='ArrowLeft')$('#vwprev').click()});
+
+/* Baut aus einem Skript-PDF das Verzeichnis aller Definitionen, Sätze, … auf */
+async function buildIndex(doc,onProgress){
+ const index={},secTitle={};let toc=0;
+ const HEAD=/^(Definition|Satz|Lemma|Korollar|Bemerkung|Beispiel)\s*(\d+(?:\s*\.\s*\d+)?)(?!\s*\.\d|\s*\d)\s*(\([^)]{0,80}\))?\s*\./;
+ for(let p=1;p<=doc.numPages;p++){
+  if(onProgress)onProgress(p,doc.numPages);
+  const tc=await (await doc.getPage(p)).getTextContent();
+  const lines=[];let cur='',off=0,start=0;
+  tc.items.forEach(t=>{if(!cur)start=off;cur+=t.str||'';off+=(t.str||'').length;if(t.hasEOL){lines.push([cur.replace(/\s+/g,' ').trim(),start]);cur='';off+=1}});
+  if(cur)lines.push([cur.replace(/\s+/g,' ').trim(),start]);
+  for(let li=0;li<lines.length;li++){const [L,o]=lines[li];if(!L)continue;const ord=p*100000+o;
+   if(!toc&&/^Inhaltsverzeichnis/.test(L)){toc=p;index['Inhaltsverzeichnis']=[p,ord];continue}
+   if(!index['Notation']&&/^Etwas Notation/.test(L))index['Notation']=[p,ord];
+   if(p===toc){const m=L.match(/^(\d)\s*\.\s*(\d)\s+(.+?)[\s.]*\s(\d+)$/);if(m)secTitle[m[1]+'.'+m[2]]=m[3].replace(/[\s.]+$/,'');continue}
+   let m=L.match(/^KAPITEL\s*(\d+)/);
+   if(m){const k='Kapitel '+m[1];if(!index[k]){let tl='';for(let j=li+1;j<lines.length&&!tl;j++)tl=lines[j][0];index[k]=[p,ord,tl.replace(/\s+d$/,'ᵈ')]}continue}
+   m=L.match(/^(\d)\s*\.\s*(\d)\s+([A-ZÄÖÜ].*)$/);
+   if(m&&toc){const k='Abschnitt '+m[1]+'.'+m[2];if(!index[k])index[k]=[p,ord,secTitle[m[1]+'.'+m[2]]||m[3]];continue}
+   m=L.match(HEAD);
+   if(m){const k=m[1]+' '+m[2].replace(/\s/g,'');if(!index[k])index[k]=[p,ord]}
+  }
+ }
+ return index}
+
+function vSkript(m){
+ const I=(SK&&SK.index)||{};
+ const btn=(r,txt,cls='refbtn')=>`<button class="${cls}" data-ref="${encodeURIComponent(r)}" data-ri="0">${txt}</button>`;
+ if(!SK||!SK.index){m.innerHTML=`<h2>Skript</h2><div class="card empty"><p class="muted">Noch kein Skript eingelesen. Lege das PDF in den Ordner „skript“ und verbinde den Lernspiel-Ordner.</p><div class="row" style="justify-content:center"><button class="btn pri" onclick="connectFolder()">Lernspiel-Ordner verbinden</button><button class="btn" data-nav="manage">Inhalte & Spielstand</button></div></div>`;return}
+ const ents=Object.entries(I).sort((a,b)=>a[1][1]-b[1][1]);
+ let h=`<h2>Skript</h2><p class="muted">${esc(SK.name||'Skript')} · ${SK.pages||'?'} Seiten${SRC.pdf?'':' · <b>PDF gerade nicht verfügbar – Ordner freigeben</b>'}. Wähle einen Abschnitt oder springe zu einer Aussage; sie wird auf der Seite markiert. Mit ‹ › bzw. den Pfeiltasten blätterst du weiter.</p>
+ <div class="row" style="margin-bottom:14px">${btn('S. 1','Von vorne lesen','btn pri')}${I['Notation']?btn('S. '+I['Notation'][0],'Notation','btn'):''}${I['Inhaltsverzeichnis']?btn('S. '+I['Inhaltsverzeichnis'][0],'Inhaltsverzeichnis','btn'):''}</div>`;
+ let open=false,secOpen=false,labs=[];
+ const flushSec=()=>{if(secOpen){h+=(labs.length?`<div class="row">${labs.map(k=>btn(k,`${short({label:k})} · S. ${I[k][0]}`)).join('')}</div>`:'')+'</div>';secOpen=false;labs=[]}};
+ for(const [k,v] of ents){
+  if(/^Kapitel /.test(k)){flushSec();if(open)h+='</div>';h+=`<div class="card sk-sec"><div class="tnum">${esc(k.toUpperCase())}</div><h3>${esc(v[2]||'')}</h3>`;open=true;continue}
+  if(/^Abschnitt /.test(k)){flushSec();h+=`<div class="libitem">${btn(k,`<b>${k.slice(10)}</b> ${esc(v[2]||'')} · S. ${v[0]}`)}`;secOpen=true;continue}
+  if(/^(Definition|Satz|Lemma|Korollar|Bemerkung|Beispiel) /.test(k)&&secOpen)labs.push(k);
+ }
+ flushSec();if(open)h+='</div>';
+ m.innerHTML=h;
+}
+
+/* ======================= ORDNER: PAKETE, SKRIPT, SPIELSTAND ======================= */
+/* Chrome/Edge: Ordner einmal verbinden (File System Access API), danach liest das Spiel
+   pakete/*.json und skript/*.pdf direkt und schreibt spielstand.json zurück.
+   Andere Browser: Ordner pro Sitzung über einen Dateiauswahl-Dialog einlesen (nur lesen). */
+const FS={supported:typeof window.showDirectoryPicker==='function',dir:null,name:'',state:'none',writable:false,packs:{},packErr:[],scanAt:0,pdf:null};
+const SRC={pdf:null,from:''};
+let MANUAL_PDF=null;
+const LS_EXTRA='mm_extra_packs_v1';
+const IDB={db:null,
+ async open(){if(this.db)return this.db;this.db=await new Promise((res,rej)=>{const r=indexedDB.open('lernspiel-mm',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});return this.db},
+ async get(k){try{const db=await this.open();return await new Promise((res,rej)=>{const r=db.transaction('kv').objectStore('kv').get(k);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}catch(e){return null}},
+ async set(k,v){try{const db=await this.open();await new Promise((res,rej)=>{const t=db.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=res;t.onerror=()=>rej(t.error)});return true}catch(e){return false}},
+ async del(k){try{const db=await this.open();await new Promise(res=>{const t=db.transaction('kv','readwrite');t.objectStore('kv').delete(k);t.oncomplete=res;t.onerror=res})}catch(e){}}};
+
+async function connectFolder(){
+ if(!FS.supported){$('#dirin').click();return}
+ try{const h=await window.showDirectoryPicker({id:'lernspiel-mm',mode:'readwrite'});await useFolder(h,true)}
+ catch(e){if(e&&e.name!=='AbortError')toast('Ordner konnte nicht geöffnet werden: '+esc(e.message||e.name))}}
+async function regrantFolder(){
+ if(!FS.dir)return connectFolder();
+ try{const p=await FS.dir.requestPermission({mode:'readwrite'});if(p==='granted')await useFolder(FS.dir,false);else toast('Ohne Freigabe nutzt das Spiel die eingebauten Pakete und den Spielstand im Browser.')}
+ catch(e){connectFolder()}}
+async function useFolder(h,isNew){
+ FS.dir=h;FS.name=h.name;FS.state='connected';FS.writable=true;
+ if(isNew)await IDB.set('dir',h);
+ await scanFolder(true);
+ if(isNew)toast('📁 Ordner „'+esc(h.name)+'“ verbunden');
+}
+async function restoreFolder(){
+ if(!FS.supported)return;
+ /* Absicherung: Ist der letzte Wiederherstellungsversuch nicht fertig geworden, nicht erneut versuchen */
+ if(LS.get('mm_restore_pending')){LS.del('mm_restore_pending');await IDB.del('dir');return}
+ LS.set('mm_restore_pending',1);
+ let h=null;try{h=await IDB.get('dir')}finally{LS.del('mm_restore_pending')}
+ if(!h||typeof h.queryPermission!=='function')return;
+ FS.dir=h;FS.name=h.name;let p='prompt';
+ try{p=await h.queryPermission({mode:'readwrite'})}catch(e){}
+ if(p==='granted'){FS.state='connected';FS.writable=true;await scanFolder(false)}else FS.state='need-permission';
+}
+async function forgetFolder(){await IDB.del('dir');FS.dir=null;FS.name='';FS.state='none';FS.writable=false;FS.packs={};FS.packErr=[];FS.pdf=null;mergePacks();choosePdf();render()}
+async function walkDir(dir,path='',depth=0,out=[]){
+ for await(const [name,h] of dir.entries()){
+  if(name.startsWith('.'))continue;
+  if(h.kind==='file')out.push([path+name,h]);
+  else if(depth<2&&name!=='lib'&&name!=='upload')await walkDir(h,path+name+'/',depth+1,out);
+ }
+ return out}
+async function scanFolder(first,quiet){
+ if(!FS.dir)return;
+ try{await scanItems(await walkDir(FS.dir),first,quiet)}
+ catch(e){if(e&&e.name==='NotAllowedError'){FS.state='need-permission';FS.writable=false;render()}else toast('Ordner konnte nicht gelesen werden: '+esc(e.message||e.name))}
+}
+/* items: [[relativer Pfad, {getFile()}], …] – gemeinsam für beide Wege */
+async function scanItems(items,first,quiet){
+ const cand=[],errs=[],pdfs=[];let prog=null;
+ for(const [p,h] of items){
+  const low=p.toLowerCase();if(low.startsWith('lib/'))continue;
+  if(low==='spielstand.json'){try{prog=JSON.parse(await (await h.getFile()).text())}catch(e){errs.push({file:p,errs:['spielstand.json ist beschädigt und wurde ignoriert.']})}continue}
+  if(low==='manifest.json')continue;
+  if(low.endsWith('.json')){try{const f=await h.getFile();cand.push([p,JSON.parse(await f.text()),f.lastModified||0])}catch(e){errs.push({file:p,errs:['Kein gültiges JSON: '+e.message]})}continue}
+  if(low.endsWith('.pdf'))pdfs.push(await h.getFile());
+ }
+ const known=new Set([...(window.LERNSPIEL_GRUNDPAKETE||[]).flatMap(p=>p.topics.map(t=>t.id)),...cand.flatMap(([,p])=>Array.isArray(p&&p.topics)?p.topics.map(t=>t&&t.id):[])]);
+ const packs={};
+ for(const [p,pk,mt] of cand){const er=checkPack(pk,known);if(er.length){errs.push({file:p,errs:er});continue}
+  /* zwei Dateien mit derselben id: höhere Version, sonst die neuere Datei gewinnt */
+  const old=packs[pk.id];if(old&&((old.version||1)>(pk.version||1)||((old.version||1)===(pk.version||1)&&old._mt>mt)))continue;
+  packs[pk.id]={...pk,_file:p,_mt:mt}}
+ const before=new Set(Object.keys(PACKS));
+ FS.packs=packs;FS.packErr=errs;FS.scanAt=Date.now();
+ FS.pdf=pdfs.sort((a,b)=>(b.lastModified||0)-(a.lastModified||0))[0]||null;
+ if(prog&&typeof prog==='object'&&prog.v){
+  const localHas=S.xp>0||S.answered>0||Object.keys(S.c).length>0;
+  if(!localHas||(prog.updatedAt||0)>(S.updatedAt||0)){S=Object.assign(defState(),prog);LS.set(LS_STATE,S);SAVE.status='ok';SAVE.lastOk=prog.updatedAt||0}
+  else if((prog.updatedAt||0)===(S.updatedAt||0))SAVE.lastOk=prog.updatedAt||0;
+  else if(FS.writable&&(S.updatedAt||0)>(prog.updatedAt||0))flushSave();
+ }else if(FS.writable&&(S.xp>0||S.answered>0||Object.keys(S.c).length>0))flushSave();
+ else if(FS.writable)SAVE.status='ok';
+ mergePacks();
+ if(!first&&!quiet){const neu=Object.keys(PACKS).filter(id=>!before.has(id));if(neu.length)toast('📦 Neues Paket: '+neu.map(id=>esc(PACKS[id].title||id)).join(', '),'gold')}
+ if(errs.length&&first)toast('⚠ '+errs.length+' Datei(en) im Ordner konnten nicht geladen werden – Details unter „Inhalte & Spielstand“.');
+ touchDay();render();choosePdf();
+}
+/* Wer eine Datei in den Ordner legt und zum Browser zurückkehrt, sieht sie sofort */
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&FS.state==='connected'&&Date.now()-FS.scanAt>2500)scanFolder(false)});
+window.addEventListener('focus',()=>{if(FS.state==='connected'&&Date.now()-FS.scanAt>2500)scanFolder(false)});
+
+/* Pakete aus allen Quellen zusammenführen. Pro id gewinnt die höhere Version;
+   bei gleicher Version: Cloud > Ordner > Browser > eingebaut. Fortschritt hängt an den
+   Aufgaben-ids und bleibt deshalb bei jedem Update erhalten. */
+const RANK={eingebaut:0,browser:1,ordner:2,cloud:3};
+function mergePacks(){
+ const map={};
+ const offer=(p,src)=>{if(!validPack(p))return;const cur=map[p.id],v=+p.version||1;
+  if(!cur||v>(+cur.version||1)||(v===(+cur.version||1)&&RANK[src]>=RANK[cur._src]))map[p.id]={...cleanPack(p),_src:src}};
+ for(const p of (window.LERNSPIEL_GRUNDPAKETE||[]))offer(p,'eingebaut');
+ const extra=LS.get(LS_EXTRA)||{};for(const id in extra)offer(extra[id],'browser');
+ for(const id in FS.packs)offer(FS.packs[id],'ordner');
+ for(const id in CLOUD.packs)offer(CLOUD.packs[id],'cloud');
+ PACKS=map;rebuildContent();
+}
+/* Paket-Texte werden als HTML angezeigt: nur harmlose Formatierung zulassen,
+   damit ein Paket aus der Cloud keinen Code im Spiel ausführen kann */
+const OK_TAGS=new Set(['B','I','EM','STRONG','BR','UL','OL','LI','SUB','SUP','SPAN','CODE','P','SMALL','U']);
+const CLEAN_CACHE=new WeakMap();
+function cleanHTML(s){
+ if(typeof s!=='string'||s.indexOf('<')<0)return s;
+ const t=document.createElement('template');t.innerHTML=s;
+ const walk=n=>{[...n.childNodes].forEach(c=>{if(c.nodeType===1){if(/^(SCRIPT|STYLE|TEMPLATE|IFRAME|OBJECT|EMBED|SVG|MATH|NOSCRIPT)$/i.test(c.tagName)){c.remove();return}walk(c);if(!OK_TAGS.has(c.tagName))c.replaceWith(...c.childNodes);else[...c.attributes].forEach(a=>c.removeAttribute(a.name))}else if(c.nodeType!==3)c.remove()})};
+ walk(t.content);return t.innerHTML}
+function cleanPack(p){
+ if(CLEAN_CACHE.has(p))return CLEAN_CACHE.get(p);
+ const L=a=>Array.isArray(a)?a.map(x=>Array.isArray(x)?x.map(cleanHTML):cleanHTML(x)):a;
+ const out={...p,cards:p.cards.map(c=>({...c,b:cleanHTML(c.b),h:cleanHTML(c.h)})),questions:p.questions.map(q=>({...q,q:cleanHTML(q.q),e:cleanHTML(q.e),o:L(q.o),s:L(q.s),p:L(q.p)}))};
+ CLEAN_CACHE.set(p,out);return out}
+/* Skript-PDF wählen: das zuletzt geänderte aus Ordner, Cloud-Download oder eigener Auswahl */
+function choosePdf(){
+ const c=[];if(FS.pdf)c.push([FS.pdf,'ordner']);if(CLOUD.pdf&&CLOUD.pdf.file)c.push([CLOUD.pdf.file,'cloud']);if(MANUAL_PDF)c.push([MANUAL_PDF,'browser']);
+ c.sort((a,b)=>(b[0].lastModified||0)-(a[0].lastModified||0));
+ const [f,from]=c[0]||[null,''];
+ if(f!==SRC.pdf){SRC.pdf=f;SRC.from=from;PDFP=null}
+ ensureIndex()}
+
+/* ======================= CLOUD-UPDATES ======================= */
+const ENGINE_VERSION=3;
+const DEFAULT_SOURCE='https://donnernick.github.io/Lernspiel/';
+const CLOUD={packs:{},pdf:null,state:'idle',msg:'',last:LS.get('mm_last_check')||0,gameNew:null,enc:null,payload:null,key:null};
+function sourceUrl(){const s=(LS.get('mm_source')||'').trim();if(s)return s;if(DEFAULT_SOURCE)return DEFAULT_SOURCE;if(/^https?:$/.test(location.protocol))return new URL('./',location.href).href;return ''}
+const asDir=u=>/\/manifest\.json$/i.test(u)?u.replace(/manifest\.json$/i,''):(u.endsWith('/')?u:u+'/');
+async function sha256(data){try{const b=await crypto.subtle.digest('SHA-256',typeof data==='string'?new TextEncoder().encode(data):data);return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){const s=typeof data==='string'?data:String(data.byteLength);let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return 'x'+(h>>>0).toString(16)}}
+async function fetchOk(url){const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status+' bei '+url.split('?')[0]);return r}
+async function writeIn(dirName,fileName,data){const d=await FS.dir.getDirectoryHandle(dirName,{create:true});const fh=await d.getFileHandle(fileName,{create:true});const w=await fh.createWritable();await w.write(data);await w.close()}
+/* ---- Verschlüsselung: AES-GCM 256, Schlüssel aus dem Passwort per PBKDF2-SHA256 ---- */
+const KDF_ITER=600000;
+const b64e=u8=>{let s='';const a=new Uint8Array(u8);for(let i=0;i<a.length;i+=0x8000)s+=String.fromCharCode.apply(null,a.subarray(i,i+0x8000));return btoa(s)};
+const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function deriveKey(pw,salt,iter){const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',hash:'SHA-256',salt,iterations:iter},base,{name:'AES-GCM',length:256},true,['encrypt','decrypt'])}
+async function encBytes(key,data){const iv=crypto.getRandomValues(new Uint8Array(12));const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},key,data));const out=new Uint8Array(12+ct.length);out.set(iv);out.set(ct,12);return out}
+async function decBytes(key,buf){const u=new Uint8Array(buf);return new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:u.slice(0,12)},key,u.slice(12)))}
+const keyName=enc=>'mm_key_'+String(enc.salt).replace(/[^A-Za-z0-9]/g,'').slice(0,16);
+async function storedKey(enc){const raw=LS.get(keyName(enc));if(!raw)return null;try{return await crypto.subtle.importKey('raw',b64d(raw),{name:'AES-GCM'},true,['encrypt','decrypt'])}catch(e){return null}}
+function forgetKeys(){try{Object.keys(localStorage).filter(k=>k.startsWith('mm_key_')).forEach(k=>localStorage.removeItem(k))}catch(e){}CLOUD.key=null}
+
+async function checkUpdates(manual){
+ const src=sourceUrl();
+ if(!src){if(manual)toast('Trag zuerst die Cloud-Adresse ein.');return}
+ if(CLOUD.state==='checking')return;
+ CLOUD.state='checking';CLOUD.msg='Suche nach Updates …';render();
+ const base=asDir(src);
+ try{
+  const man=await (await fetchOk(new URL('manifest.json?t='+Date.now(),base).href)).json();
+  let list=man,key=null;
+  if(man&&man.enc){
+   CLOUD.enc=man.enc;CLOUD.payload=man.payload;
+   key=CLOUD.key||await storedKey(man.enc);
+   if(!key){let had=false;try{had=Object.keys(localStorage).some(k=>k.startsWith('mm_key_'))}catch(e){}CLOUD.state='needpw';CLOUD.msg=had?'Das Passwort wurde geändert – bitte das neue eingeben.':'Die Lerninhalte sind mit einem Passwort geschützt.';render();return}
+   try{list=JSON.parse(new TextDecoder().decode(await decBytes(key,b64d(man.payload))))}
+   catch(e){forgetKeys();CLOUD.state='needpw';CLOUD.msg='Das Passwort wurde geändert – bitte das neue eingeben.';render();return}
+   CLOUD.key=key;
+  }
+  if(!list||!Array.isArray(list.packs))throw new Error('Die manifest.json in der Cloud hat kein gültiges Format.');
+  const get=async(file,ver,asBlob)=>{const r=await fetchOk(new URL(file+'?v='+encodeURIComponent(ver||Date.now()),base).href);
+   if(key){const plain=await decBytes(key,await r.arrayBuffer());return asBlob?new Blob([plain],{type:'application/pdf'}):new TextDecoder().decode(plain)}
+   return asBlob?r.blob():r.text()};
+  const store={...CLOUD.packs},done=[],fail=[];
+  const known=new Set([...Object.values(PACKS).flatMap(p=>p.topics.map(t=>t.id)),...list.packs.flatMap(e=>(e&&e.topics)||[])]);
+  for(const e of list.packs){
+   if(!e||!/^[A-Za-z0-9_-]{1,40}$/.test(e.id||'')||typeof e.file!=='string'||/(^|\/)\.\.(\/|$)/.test(e.file))continue;
+   const have=store[e.id];
+   if(have&&e.hash&&have._hash===e.hash)continue;
+   try{
+    const txt=await get(e.file,e.hash||e.version,false);
+    const p=JSON.parse(txt);if(p.id!==e.id)throw new Error('id passt nicht zum Manifest');
+    const er=checkPack(p,known);if(er.length)throw new Error(er[0]);
+    p._hash=e.hash||await sha256(txt);
+    if(have&&have._hash===p._hash)continue;
+    const cur=PACKS[p.id],cp=cleanPack(p);store[p.id]=p;
+    const changed=!cur||(+p.version||1)!==(+cur.version||1)||JSON.stringify([cp.questions,cp.cards,cp.topics])!==JSON.stringify([cur.questions.map(({pack,...q})=>q),cur.cards.map(({pack,...c})=>c),cur.topics]);
+    if(changed)done.push((cur?'↻ ':'＋ ')+(p.title||p.id));
+    if(FS.writable){try{await writeIn('pakete',(p.id+'.json').replace(/[^A-Za-z0-9_.-]/g,'_'),txt)}catch(x){}}
+   }catch(x){fail.push((e.title||e.id)+': '+x.message)}
+  }
+  const listed=new Set(list.packs.map(e=>e&&e.id));for(const id in store)if(!listed.has(id))delete store[id];
+  CLOUD.packs=store;await IDB.set('cloudpacks',store);
+  let skriptNeu=false;
+  const sk=list.skript;
+  if(sk&&typeof sk.file==='string'&&!/(^|\/)\.\.(\/|$)/.test(sk.file)){
+   const ver=sk.hash||sk.version||'';
+   if(!CLOUD.pdf||CLOUD.pdf.version!==ver){
+    try{const blob=await get(sk.file,ver,true);
+     const name=(sk.label||sk.file.split('/').pop()).replace(/[\\/:*?"<>|]/g,'_');
+     const file=new File([blob],name,{type:'application/pdf',lastModified:Date.now()});
+     CLOUD.pdf={file,version:ver,label:name};await IDB.set('cloudpdf',CLOUD.pdf);skriptNeu=true;
+     if(FS.writable){try{const prev=LS.get('mm_cloud_pdf_name');await writeIn('skript',name,blob);if(prev&&prev!==name){try{await (await FS.dir.getDirectoryHandle('skript')).removeEntry(prev)}catch(x){}}LS.set('mm_cloud_pdf_name',name)}catch(x){}}
+    }catch(x){fail.push('Skript: '+x.message)}
+   }
+  }
+  CLOUD.gameNew=(man.game&&+man.game.version>ENGINE_VERSION)?{version:+man.game.version,url:new URL(man.game.download||'./',base).href,notes:String(man.game.notes||'')}:null;
+  CLOUD.last=Date.now();LS.set('mm_last_check',CLOUD.last);
+  CLOUD.state=fail.length?'warn':'ok';
+  CLOUD.msg=(done.length||skriptNeu)?'Aktualisiert: '+[...done,skriptNeu?'📖 Skript':null].filter(Boolean).join(', '):'Alles aktuell.';
+  if(fail.length)CLOUD.msg+=' · Nicht übernommen: '+fail.join(' · ');
+  if(FS.writable&&(done.length||skriptNeu))await scanFolder(false,true);else{mergePacks();choosePdf()}
+  if(done.length||skriptNeu)toast('☁ '+esc(CLOUD.msg),'gold');else if(manual)toast('☁ Alles aktuell');
+ }catch(e){
+  CLOUD.state='err';
+  CLOUD.msg=e&&e.name==='TypeError'?'Cloud nicht erreichbar – offline, falsche Adresse, oder die Cloud erlaubt keinen Direktabruf (z. B. OneDrive/Google Drive). GitHub Pages funktioniert.':(e.message||String(e));
+  if(manual)toast('☁ '+esc(CLOUD.msg));
+ }
+ render();
+}
+/* Passwort der Spielenden prüfen; gespeichert wird nur der abgeleitete Schlüssel */
+async function submitPassword(ev){
+ if(ev)ev.preventDefault();
+ const inp=ev&&ev.target?ev.target.querySelector('input[type=password]'):null,pw=inp?inp.value:'';
+ if(!pw||!CLOUD.enc)return false;
+ CLOUD.msg='Passwort wird geprüft …';render();
+ try{const key=await deriveKey(pw,b64d(CLOUD.enc.salt),+CLOUD.enc.iter||KDF_ITER);
+  await decBytes(key,b64d(CLOUD.payload));
+  forgetKeys();LS.set(keyName(CLOUD.enc),b64e(await crypto.subtle.exportKey('raw',key)));CLOUD.key=key;CLOUD.state='idle';
+  toast('🔓 Freigeschaltet – Inhalte werden geladen');checkUpdates(false);
+ }catch(e){CLOUD.state='needpw';CLOUD.msg='Das Passwort stimmt nicht.';render()}
+ return false}
+function pwForm(){return `<form class="row" style="margin-top:10px" onsubmit="return submitPassword(event)"><input type="password" class="search" style="margin:0;flex:1;min-width:180px" placeholder="Passwort" autocomplete="current-password" aria-label="Passwort für die Lerninhalte"><button class="btn pri" type="submit">Freischalten</button></form>`}
+
+/* ---- Herausgeber: verschlüsselten Upload-Ordner erzeugen ---- */
+const PUB={msg:'',res:null};
+async function copyTree(src,dst){for await(const [n,h] of src.entries()){if(n.startsWith('.'))continue;if(h.kind==='file'){const f=await h.getFile();const w=await (await dst.getFileHandle(n,{create:true})).createWritable();await w.write(f);await w.close()}else await copyTree(h,await dst.getDirectoryHandle(n,{create:true}))}}
+const SPIELER_TXT=`LERNSPIEL „MASS & MESSBARKEIT“\n\nOnline: Lernspiel.html auf der Seite öffnen.\nOffline: Diesen Ordner herunterladen (bei GitHub: „Code“ → „Download ZIP“), entpacken,\nLernspiel.html öffnen (am besten Chrome oder Edge).\n\nBeim ersten Start fragt das Spiel nach dem Passwort für die Lerninhalte.\nDanach lädt es neue Inhalte und Skript-Fassungen automatisch; dein Spielstand bleibt erhalten.\nUnter ⚙ Inhalte & Spielstand kannst du einen Ordner verbinden, damit der Spielstand\nals Datei (spielstand.json) gespeichert wird.\n`;
+async function publishBuild(){
+ const v=id=>(($('#'+id)||{}).value||'').trim();
+ const url=v('pubsrc'),pw=($('#pubpw')||{}).value||'',pw2=($('#pubpw2')||{}).value||'',dl=v('pubdl');
+ const fail=t=>{PUB.msg=t;PUB.res=null;render()};
+ if(!/^https:\/\/[^\s'"\\<>]+$/.test(url))return fail('Bitte die öffentliche Adresse eintragen (beginnt mit https://).');
+ if(pw.length<10)return fail('Das Passwort muss mindestens 10 Zeichen lang sein.');
+ if(pw!==pw2)return fail('Die beiden Passwörter stimmen nicht überein.');
+ if(!FS.supported)return fail('Dafür brauchst du Chrome oder Edge.');
+ LS.set('mm_pub_url',url);if(dl)LS.set('mm_pub_dl',dl);
+ let dir;try{dir=await window.showDirectoryPicker({id:'lernspiel-pub',mode:'readwrite'})}catch(e){return}
+ PUB.msg='Herausgeber-Ordner wird gelesen …';PUB.res=null;render();
+ try{
+  const items=await walkDir(dir),errs=[],cand=[];let pdf=null;
+  for(const [p,h] of items){const low=p.toLowerCase();
+   if(low.startsWith('pakete/')&&low.endsWith('.json')){const txt=await (await h.getFile()).text();try{cand.push([p,txt,JSON.parse(txt)])}catch(e){errs.push(p+': kein gültiges JSON')}}
+   if(low.startsWith('skript/')&&low.endsWith('.pdf')){const f=await h.getFile();if(!pdf||f.lastModified>pdf.lastModified)pdf=f}}
+  if(!cand.length)errs.push('Im Unterordner „pakete“ liegen keine Paket-Dateien – ist das der richtige Ordner?');
+  const known=new Set(cand.flatMap(([,,o])=>Array.isArray(o&&o.topics)?o.topics.map(t=>t&&t.id):[])),ids=new Set();
+  for(const [p,,o] of cand){const er=checkPack(o,known);if(er.length)errs.push(p+': '+er[0]);else if(ids.has(o.id))errs.push(p+': id „'+o.id+'“ kommt doppelt vor');else ids.add(o.id)}
+  let html='';try{html=await (await (await dir.getFileHandle('Lernspiel.html')).getFile()).text()}catch(e){errs.push('Lernspiel.html fehlt im Ordner.')}
+  const PK=/\/\*PAKETE-ANFANG\*\/[\s\S]*?\/\*PAKETE-ENDE\*\//,DS=/const DEFAULT_SOURCE='[^'\n]*';/;
+  if(html&&(!PK.test(html)||!DS.test(html)))errs.push('Lernspiel.html ist eine ältere Fassung – bitte die aktuelle verwenden.');
+  let lib=null;try{lib=await dir.getDirectoryHandle('lib')}catch(e){errs.push('Der Ordner „lib“ fehlt.')}
+  if(errs.length){PUB.msg='';PUB.res={errs};render();return}
+  PUB.msg='Inhalte werden verschlüsselt …';render();
+  const up=await dir.getDirectoryHandle('upload',{create:true}),inh=await up.getDirectoryHandle('inhalt',{create:true});
+  /* Gleiches Passwort wie beim letzten Mal? Dann Salz behalten, damit niemand neu eingeben muss */
+  let salt=null,pwChanged=false,first=true;
+  try{const old=JSON.parse(await (await (await up.getFileHandle('manifest.json')).getFile()).text());
+   if(old&&old.enc){first=false;const s=b64d(old.enc.salt);try{await decBytes(await deriveKey(pw,s,+old.enc.iter||KDF_ITER),b64d(old.payload));salt=s}catch(e){pwChanged=true}}}catch(e){}
+  if(!salt)salt=crypto.getRandomValues(new Uint8Array(16));
+  const key=await deriveKey(pw,salt,KDF_ITER);
+  const enc=new TextEncoder(),entries=[],keep=new Set();
+  const put=async(name,bytes)=>{const w=await (await inh.getFileHandle(name,{create:true})).createWritable();await w.write(bytes);await w.close();keep.add(name)};
+  for(const [p,txt,o] of cand){const fn='p-'+(await sha256(o.id)).slice(0,12)+'.enc';await put(fn,await encBytes(key,enc.encode(txt)));
+   entries.push({id:o.id,version:+o.version||1,title:o.title,file:'inhalt/'+fn,hash:await sha256(txt),topics:o.topics.map(t=>t.id)})}
+  let skript=null;
+  if(pdf){const buf=await pdf.arrayBuffer();await put('skript.enc',await encBytes(key,new Uint8Array(buf)));skript={file:'inhalt/skript.enc',hash:await sha256(buf),label:pdf.name}}
+  for await(const [n] of inh.entries())if(!keep.has(n)){try{await inh.removeEntry(n)}catch(e){}}
+  const payload=b64e(await encBytes(key,enc.encode(JSON.stringify({packs:entries,skript}))));
+  const man={format:2,name:'Maß & Messbarkeit – Höhere Analysis',updated:new Date().toISOString(),game:{version:ENGINE_VERSION,download:dl||'./'},enc:{alg:'AES-GCM-256',kdf:'PBKDF2-SHA256',iter:KDF_ITER,salt:b64e(salt)},payload};
+  const wr=async(d,name,data)=>{const w=await (await d.getFileHandle(name,{create:true})).createWritable();await w.write(data);await w.close()};
+  await wr(up,'manifest.json',JSON.stringify(man,null,1));
+  await wr(up,'Lernspiel.html',html.replace(PK,'/*PAKETE-ANFANG*/[]/*PAKETE-ENDE*/').replace(DS,`const DEFAULT_SOURCE='${url}';`));
+  await wr(up,'LIESMICH.txt',SPIELER_TXT);
+  PUB.msg='Bibliotheken werden kopiert …';render();
+  await copyTree(lib,await up.getDirectoryHandle('lib',{create:true}));
+  PUB.msg='';PUB.res={ok:true,packs:entries.length,questions:cand.reduce((s,[,,o])=>s+o.questions.length,0),skript:pdf&&pdf.name,pwChanged,first,dir:dir.name};
+ }catch(e){PUB.msg='Fehler: '+(e.message||e.name);PUB.res=null}
+ render();
+}
+function cloudCard(){
+ const src=sourceUrl(),last=CLOUD.last?new Date(CLOUD.last).toLocaleString('de-DE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'noch nie';
+ const st={checking:'',ok:'ok',warn:'warn',err:'warn',needpw:'warn',idle:''}[CLOUD.state]||'';
+ return `<div class="card"><h3>☁ Cloud-Updates</h3>
+  <p class="small muted">Beim Start schaut das Spiel in der Cloud nach neuen oder geänderten Aufgabenpaketen und einem neuen Skript und spielt sie hier ein. Dein Spielstand bleibt dabei unverändert.</p>
+  <label class="small muted" for="srcin">Cloud-Adresse</label>
+  <input class="search" id="srcin" style="margin:4px 0 8px" placeholder="https://name.github.io/lernspiel/" value="${esc(src)}">
+  <div class="row"><button class="btn pri" id="chkupd" ${CLOUD.state==='checking'?'disabled':''}>${CLOUD.state==='checking'?'Sucht …':'Jetzt nach Updates suchen'}</button><button class="btn" id="srcsave">Adresse speichern</button></div>
+  ${CLOUD.msg?`<p class="small" style="margin-top:10px"><span class="pill save ${st}">${CLOUD.state==='needpw'?'🔒':CLOUD.state==='err'?'⚠':'☁'}</span> ${esc(CLOUD.msg)}</p>`:''}
+  ${CLOUD.state==='needpw'?pwForm():''}
+  <p class="small muted" style="margin:10px 0 0">Zuletzt geprüft: ${last} · Aus der Cloud installiert: ${Object.keys(CLOUD.packs).length} Pakete${CLOUD.pdf?', Skript „'+esc(CLOUD.pdf.label)+'“':''}${CLOUD.key?' · 🔓 freigeschaltet <button class="linkbtn" onclick="forgetKeys();toast(\'Passwort auf diesem Gerät vergessen\');render()">vergessen</button>':''}</p>
+  ${CLOUD.gameNew?`<div class="fb ok" style="margin-top:10px"><b>Neue Spielversion ${CLOUD.gameNew.version} verfügbar.</b> ${esc(CLOUD.gameNew.notes)} <a href="${esc(CLOUD.gameNew.url)}" target="_blank" rel="noopener">Herunterladen</a> – danach nur <b>Lernspiel.html</b> (und ggf. <b>lib</b>) ersetzen, dein Spielstand bleibt.</div>`:''}
+ </div>`}
+function publishCard(){
+ const r=PUB.res;
+ return `<details class="card" style="margin-top:14px" ${r||PUB.msg?'open':''}><summary style="cursor:pointer;font:700 18px var(--f-disp)">Für Herausgeber: Inhalte verschlüsselt veröffentlichen</summary>
+  <ol class="small" style="margin:12px 0;padding-left:20px;line-height:1.7">
+   <li>Im Herausgeber-Ordner: neue oder geänderte Paket-Dateien in <b>pakete</b>, das aktuelle Skript-PDF in <b>skript</b> (alte Fassung löschen). Geänderte Pakete: <b>version</b> erhöhen, ids nie ändern.</li>
+   <li>Hier Adresse und Passwort eintragen, „Upload-Ordner erzeugen“ klicken und den Herausgeber-Ordner auswählen. Das Spiel prüft alle Pakete und schreibt den Unterordner <b>upload</b> – darin ist alles verschlüsselt.</li>
+   <li>Den <b>Inhalt</b> von <b>upload</b> zu GitHub hochladen. Alle Spielenden bekommen die Inhalte beim nächsten Start.</li>
+  </ol>
+  <label class="small muted" for="pubsrc">Öffentliche Adresse (GitHub Pages), z. B. https://name.github.io/lernspiel/</label>
+  <input class="search" id="pubsrc" style="margin:4px 0 8px" placeholder="https://name.github.io/lernspiel/" value="${esc(LS.get('mm_pub_url')||'')}">
+  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:8px">
+   <div><label class="small muted" for="pubpw">Passwort (mind. 10 Zeichen)</label><input class="search" type="password" id="pubpw" style="margin:4px 0 8px" autocomplete="new-password"></div>
+   <div><label class="small muted" for="pubpw2">Passwort wiederholen</label><input class="search" type="password" id="pubpw2" style="margin:4px 0 8px" autocomplete="new-password"></div>
+  </div>
+  <p class="small muted" style="margin:0 0 8px">Bei jeder Veröffentlichung dasselbe Passwort verwenden – dann müssen die Spielenden es nicht neu eingeben. Ein neues Passwort sperrt alle aus, bis sie es bekommen.</p>
+  <label class="small muted" for="pubdl">Download-Link für das ganze Spiel (optional)</label>
+  <input class="search" id="pubdl" style="margin:4px 0 8px" placeholder="https://github.com/name/lernspiel/archive/refs/heads/main.zip" value="${esc(LS.get('mm_pub_dl')||'')}">
+  <button class="btn pri" id="pubgo">Upload-Ordner erzeugen …</button>
+  ${PUB.msg?`<p class="small">${esc(PUB.msg)}</p>`:''}
+  ${r&&r.errs?`<div class="fb bad" style="margin-top:10px"><b>Nichts erzeugt – erst das hier korrigieren:</b><ul style="margin:6px 0 0;padding-left:20px">${r.errs.map(e=>'<li>'+esc(e)+'</li>').join('')}</ul></div>`:''}
+  ${r&&r.ok?`<div class="fb ok" style="margin-top:10px"><b>Fertig: „${esc(r.dir)}/upload“</b> enthält ${r.packs} verschlüsselte Pakete mit ${r.questions} Aufgaben${r.skript?' und das verschlüsselte Skript „'+esc(r.skript)+'“':' – <b>aber kein Skript-PDF</b> (Ordner skript ist leer)'}. Lade jetzt den <b>Inhalt</b> von <b>upload</b> zu GitHub hoch.${r.pwChanged?'<br><b>Neues Passwort:</b> Alle Spielenden müssen es nach dem Hochladen neu eingeben.':''}</div>`:''}
+ </details>`}
+
+/* ---- Skript: Verzeichnis aus dem PDF aufbauen (wird pro Fassung zwischengespeichert) ---- */
+let IDXJOB=null;
+function setIdxMsg(t){const el=$('#idxmsg');if(!el)return;el.textContent=t;el.hidden=!t}
+function ensureIndex(){
+ const f=SRC.pdf;if(!f)return;
+ const key=[f.name,f.size,f.lastModified||0].join('|');
+ if(SK&&SK.key===key&&SK.index)return;
+ const cached=LS.get(LS_SK);if(cached&&cached.key===key&&cached.index){SK=cached;rebuildNum();render();return}
+ if(IDXJOB&&IDXJOB.key===key)return;
+ IDXJOB={key};
+ (async()=>{
+  try{setIdxMsg('📖 Skript wird eingelesen …');
+   const doc=await getPdf();
+   const index=await buildIndex(doc,(p,n)=>setIdxMsg(`📖 Skript „${f.name}“ wird eingelesen … Seite ${p} von ${n}`));
+   SK={key,name:f.name,label:f.name,pages:doc.numPages,index,date:f.lastModified||Date.now()};LS.set(LS_SK,SK);rebuildNum();setIdxMsg('');render();
+   toast(`📖 Skript eingelesen: ${doc.numPages} Seiten, ${Object.keys(index).length} Einträge`);
+  }catch(e){setIdxMsg('');toast('Skript konnte nicht gelesen werden: '+esc(e.message||e))}
+  finally{IDXJOB=null}})();
+}
+
+/* ======================= INHALTE & SPIELSTAND ======================= */
+const MG={confirmReset:false,importPreview:null,importErr:'',importName:'',delPack:null};
+function checkPack(p,known){
+ const errs=[];if(!p||typeof p!=='object'||Array.isArray(p))return['Die Datei enthält kein Aufgabenpaket (JSON-Objekt erwartet).'];
+ if(!/^[A-Za-z0-9_-]{1,40}$/.test(p.id||''))errs.push('„id“ fehlt oder enthält unerlaubte Zeichen (erlaubt: Buchstaben, Ziffern, _ und -).');
+ if(!p.title)errs.push('„title“ fehlt.');
+ for(const k of ['topics','cards','questions'])if(!Array.isArray(p[k]))errs.push(`„${k}“ muss eine Liste sein.`);
+ if(errs.length)return errs;
+ const tids=new Set([...p.topics.map(t=>t&&t.id),...TOPICS.map(t=>t.id),...(known||[])]),ids=new Set();
+ p.topics.forEach((t,i)=>{if(!t||!t.id||!t.t||!t.n)errs.push(`Abschnitt ${i+1}: id, n und t sind nötig.`)});
+ p.cards.forEach((c,i)=>{if(!c||!c.id||!c.t||!c.r||!c.n||!c.b){errs.push(`Karte ${i+1}: id, t, r, n und b sind nötig.`);return}if(!tids.has(c.t))errs.push(`Karte ${c.id}: Abschnitt „${c.t}“ unbekannt.`);if(ids.has(c.id))errs.push(`Doppelte id ${c.id}.`);ids.add(c.id)});
+ p.questions.forEach((q,i)=>{if(!q){errs.push(`Frage ${i+1} ist leer.`);return}const n=q.id||('#'+(i+1));
+  if(!q.id||!q.t||!q.q||![1,2,3].includes(q.l))errs.push(`Frage ${n}: id, t, l (1–3) und q sind nötig.`);
+  if(q.t&&!tids.has(q.t))errs.push(`Frage ${n}: Abschnitt „${q.t}“ unbekannt.`);
+  if(q.k==='mc'){if(!(Array.isArray(q.o)&&q.o.length>=2&&Number.isInteger(q.a)&&q.a>=0&&q.a<q.o.length))errs.push(`Frage ${n}: o (Optionen) und a (Index der richtigen) passen nicht.`)}
+  else if(q.k==='tf'){if(typeof q.a!=='boolean')errs.push(`Frage ${n}: a muss true oder false sein.`)}
+  else if(q.k==='match'){if(!(Array.isArray(q.p)&&q.p.length>=2))errs.push(`Frage ${n}: p braucht mindestens zwei Paare.`)}
+  else if(q.k==='order'){if(!(Array.isArray(q.s)&&q.s.length>=2))errs.push(`Frage ${n}: s braucht mindestens zwei Schritte.`)}
+  else errs.push(`Frage ${n}: k muss mc, tf, match oder order sein.`);
+  if(ids.has(q.id))errs.push(`Doppelte id ${q.id}.`);ids.add(q.id)});
+ return errs.slice(0,12)}
+function downloadJSON(obj,name){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(obj,null,1)],{type:'application/json'}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+async function writePackToFolder(p,filename){
+ const d=await FS.dir.getDirectoryHandle('pakete',{create:true});
+ const fh=await d.getFileHandle(filename,{create:true});const w=await fh.createWritable();await w.write(JSON.stringify(p,null,1));await w.close()}
+function folderCard(){
+ const st=FS.state;
+ const head=st==='connected'?`<p><span class="pill save ok">📁 verbunden</span> <b>${esc(FS.name)}</b></p><p class="small muted">Neue Pakete einfach in den Unterordner <b>pakete</b> legen, ein neues Skript-PDF in <b>skript</b>. Beim Zurückkehren in dieses Fenster liest das Spiel den Ordner automatisch neu ein.</p>`
+ :st==='readonly'?`<p><span class="pill save">📁 eingelesen (nur lesen)</span> <b>${esc(FS.name)}</b></p><p class="small muted">Dein Browser kann nicht in Ordner schreiben. Pakete und Skript sind für diese Sitzung geladen; wähle den Ordner beim nächsten Start erneut. Den Spielstand sicherst du mit „Spielstand exportieren“ – leg die Datei als <b>spielstand.json</b> in den Ordner, dann wird sie beim Einlesen übernommen.</p>`
+ :st==='need-permission'?`<p><span class="pill save warn">📁 Freigabe nötig</span> <b>${esc(FS.name)}</b></p><p class="small muted">Der Browser fragt nach jedem Neustart einmal, ob das Spiel den Ordner wieder lesen und schreiben darf.</p>`
+ :`<p class="small muted">Verbinde den Ordner, in dem diese Datei liegt (z. B. „Lernspiel-Hoehere-Analysis“). Dann lädt das Spiel alle Pakete aus <b>pakete</b> und das Skript aus <b>skript</b> und speichert deinen Spielstand dort als <b>spielstand.json</b>.${FS.supported?'':' Dein Browser kann Ordner nur lesen – nutze für das volle Erlebnis Chrome oder Edge.'}</p>`;
+ const btns=st==='connected'?`<button class="btn" id="rescan">↻ Neu einlesen</button><button class="btn" id="conn">Anderen Ordner wählen</button><button class="linkbtn" id="forget">Verbindung trennen</button>`
+ :st==='need-permission'?`<button class="btn pri" id="regrant">Ordner freigeben</button><button class="btn" id="conn">Anderen Ordner wählen</button>`
+ :`<button class="btn pri" id="conn">${FS.supported?'Lernspiel-Ordner verbinden':'Lernspiel-Ordner einlesen'}</button>`;
+ const errs=FS.packErr.length?`<div class="fb bad" style="margin-top:12px"><b>Nicht geladen:</b><ul style="margin:6px 0 0;padding-left:20px">${FS.packErr.map(e=>`<li><b>${esc(e.file)}</b>: ${e.errs.map(esc).join(' · ')}</li>`).join('')}</ul></div>`:'';
+ return `<div class="card"><h3>Lernspiel-Ordner</h3>${head}<div class="row">${btns}</div>${errs}</div>`}
+function vManage(m){
+ const list=Object.values(PACKS).filter(validPack).sort((a,b)=>(a.order||0)-(b.order||0));
+ const last=SAVE.lastOk?new Date(SAVE.lastOk).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}):'–';
+ const store=FS.writable?`Im Ordner „${esc(FS.name)}“ als spielstand.json (zusätzlich im Browser)`:'In diesem Browser';
+ const srcBadge={ordner:'aus dem Ordner',eingebaut:'eingebaut',browser:'im Browser gespeichert',cloud:'aus der Cloud'};
+ m.innerHTML=`<h2>Inhalte & Spielstand</h2>
+ <div class="grid g2">
+  ${cloudCard()}
+  ${folderCard()}
+  <div class="card"><h3>Spielstand</h3>
+   <dl class="kv"><dt>Speicherort</dt><dd>${store}</dd><dt>Zuletzt gespeichert</dt><dd>${FS.writable?last:'automatisch'}</dd><dt>XP / Level</dt><dd>${S.xp} XP · Lv ${lvlOf(S.xp)}</dd><dt>Beantwortet</dt><dd>${S.answered} Fragen</dd><dt>Erfolge</dt><dd>${Object.keys(S.badges).length}</dd></dl>
+   <div class="row" style="margin-top:12px"><button class="btn" id="exp">Spielstand exportieren</button><label class="btn"><input type="file" id="impst" accept="application/json,.json" hidden>Spielstand importieren</label></div>
+   ${MG.confirmReset?`<div class="confirm"><b>Spielstand wirklich zurücksetzen?</b><p class="small" style="margin:6px 0 10px">XP, Beherrschung, Karteikarten-Fächer, Bosse, Rekorde und Erfolge werden gelöscht${FS.writable?' – auch in spielstand.json':''}. Das lässt sich nicht rückgängig machen. Die Aufgabenpakete bleiben erhalten.</p><div class="row"><button class="btn danger fill" id="rsYes">Ja, alles zurücksetzen</button><button class="btn" id="rsNo">Abbrechen</button></div></div>`
+   :`<div class="row" style="margin-top:8px"><button class="btn danger" id="rs">Spielstand zurücksetzen …</button></div>`}
+  </div>
+  <div class="card"><h3>Skript</h3>
+   ${SRC.pdf||SK?`<dl class="kv"><dt>Datei</dt><dd>${esc((SRC.pdf&&SRC.pdf.name)||(SK&&SK.name)||'–')}</dd><dt>Quelle</dt><dd>${SRC.from==='ordner'?'Lernspiel-Ordner':SRC.from==='cloud'?'aus der Cloud':SRC.from==='browser'?'im Browser gespeichert':'zuletzt eingelesen'}</dd><dt>Seiten</dt><dd>${SK&&SK.pages||'?'}</dd><dt>Verzeichnis</dt><dd>${Object.keys((SK&&SK.index)||{}).length} Einträge</dd></dl>`:'<p class="muted">Noch kein Skript gefunden.</p>'}
+   <p class="small muted">Das Spiel nimmt immer die neueste Fassung – aus der Cloud, dem Ordner <b>skript</b> oder deiner eigenen Auswahl hier.</p>
+   <label class="btn"><input type="file" id="pdfin" accept="application/pdf" hidden>Skript-PDF auswählen</label>
+  </div>
+ </div>
+ <div class="card" style="margin-top:14px"><h3>Aufgabenpakete</h3>
+  <p class="small muted">Jedes Paket bringt Abschnitte, Karteikarten und Aufgaben mit. Ausgeschaltete Pakete verschwinden nur aus dem Spiel, dein Fortschritt darin bleibt erhalten. Gibt es ein Paket mehrfach (eingebaut, im Ordner, aus der Cloud), gilt die höchste Version.</p>
+  <div class="plist">${list.map(p=>`<div class="pi"><div><b>${esc(p.title||p.id)}</b>${isRecent(p.added)?' <span class="new">NEU</span>':''}<div class="small muted">${p.topics.length} Abschnitte · ${p.cards.length} Karten · ${p.questions.length} Aufgaben · ${srcBadge[p._src]||''}${p._file?' ('+esc(p._file)+')':''}${p.added?' · hinzugefügt '+esc(p.added):''}</div>
+   ${MG.delPack===p.id?`<div class="confirm"><b>Paket „${esc(p.title||p.id)}“ aus dem Browser entfernen?</b><div class="row" style="margin-top:8px"><button class="btn danger fill" data-delyes="${esc(p.id)}">Entfernen</button><button class="btn" data-delno="1">Abbrechen</button></div></div>`:''}</div>
+   <div class="row"><label class="toggle"><input type="checkbox" data-tog="${esc(p.id)}" ${S.off&&S.off[p.id]?'':'checked'}> aktiv</label>${p._src==='browser'?`<button class="btn danger" data-del="${esc(p.id)}">Entfernen</button>`:''}</div></div>`).join('')||'<p class="muted">Noch keine Pakete vorhanden.</p>'}</div>
+  <h3 style="margin-top:18px">Paket hinzufügen</h3>
+  <p class="small muted">${FS.writable?'Am einfachsten: die Paket-Datei in den Ordner <b>pakete</b> legen. Oder hier auswählen bzw. einfügen – das Spiel speichert sie dann selbst in den Ordner.':'Paket-Datei auswählen oder ihren Inhalt einfügen. Ohne verbundenen Ordner wird das Paket im Browser gespeichert.'}</p>
+  <div class="row" style="margin-bottom:8px"><label class="btn"><input type="file" id="packfile" accept="application/json,.json" hidden>Datei auswählen</label></div>
+  <textarea class="inp" id="packtxt" placeholder='{"id":"k4","title":"Kapitel 4 …","topics":[…],"cards":[…],"questions":[…]}'></textarea>
+  <div class="row"><button class="btn" id="packchk">Prüfen</button>${MG.importPreview?`<button class="btn pri" id="packsave">„${esc(MG.importPreview.title)}“ übernehmen</button>`:''}</div>
+  ${MG.importErr?`<div class="fb bad" style="margin-top:10px">${MG.importErr}</div>`:''}
+  ${MG.importPreview?`<div class="fb ok" style="margin-top:10px">Paket ist gültig: ${MG.importPreview.topics.length} Abschnitte, ${MG.importPreview.cards.length} Karten, ${MG.importPreview.questions.length} Aufgaben.${PACKS[MG.importPreview.id]?' Es ersetzt das vorhandene Paket mit derselben id.':''}</div>`:''}
+ </div>
+ ${publishCard()}`;
+ const on=(id,f)=>{const el=$('#'+id);if(el)el.onclick=f};
+ on('chkupd',()=>{const v=$('#srcin').value.trim();if(v!==sourceUrl())LS.set('mm_source',v);checkUpdates(true)});
+ on('srcsave',()=>{const v=$('#srcin').value.trim();if(v&&!/^https?:\/\//.test(v)){toast('Die Adresse muss mit https:// beginnen.');return}LS.set('mm_source',v);toast(v?'Cloud-Adresse gespeichert':'Cloud-Adresse entfernt');if(v)checkUpdates(true);else render()});
+ on('pubgo',publishBuild);
+ on('conn',connectFolder);on('regrant',regrantFolder);on('rescan',()=>scanFolder(false));on('forget',forgetFolder);
+ on('rs',()=>{MG.confirmReset=true;render()});on('rsNo',()=>{MG.confirmReset=false;render()});
+ on('rsYes',()=>{const off=S.off;S=defState();S.off=off||{};SES=null;CS.cur=null;MG.confirmReset=false;touchDay();save();if(FS.writable)flushSave();toast('Spielstand zurückgesetzt');render()});
+ on('exp',()=>downloadJSON(S,'spielstand.json'));
+ const ist=$('#impst');if(ist)ist.onchange=async()=>{const f=ist.files[0];if(!f)return;try{const o=JSON.parse(await f.text());if(!o||!o.v||typeof o.xp!=='number')throw new Error('keine Spielstand-Datei');S=Object.assign(defState(),o);S.updatedAt=Date.now();save();if(FS.writable)flushSave();toast('Spielstand importiert');render()}catch(e){toast('Import nicht möglich: '+esc(e.message))}};
+ m.querySelectorAll('[data-tog]').forEach(cb=>cb.onchange=()=>{S.off=S.off||{};if(cb.checked)delete S.off[cb.dataset.tog];else S.off[cb.dataset.tog]=true;save();rebuildContent();SES=null;renderHeader()});
+ m.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{MG.delPack=b.dataset.del;render()});
+ m.querySelectorAll('[data-delno]').forEach(b=>b.onclick=()=>{MG.delPack=null;render()});
+ m.querySelectorAll('[data-delyes]').forEach(b=>b.onclick=()=>{const ex=LS.get(LS_EXTRA)||{};delete ex[b.dataset.delyes];LS.set(LS_EXTRA,ex);MG.delPack=null;mergePacks();render()});
+ const pf=$('#packfile');if(pf)pf.onchange=async()=>{const f=pf.files[0];if(f){MG.importName=f.name;$('#packtxt').value=await f.text();$('#packchk').click()}};
+ on('packchk',()=>{let p;MG.importPreview=null;MG.importErr='';const txt=$('#packtxt').value;
+  try{p=JSON.parse(txt)}catch(e){MG.importErr='Kein gültiges JSON: '+esc(e.message)}
+  if(p){const er=checkPack(p);if(er.length)MG.importErr='<b>Das Paket hat Fehler:</b><ul style="margin:6px 0 0;padding-left:20px">'+er.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>';else MG.importPreview=p}
+  render();const ta=$('#packtxt');if(ta)ta.value=txt});
+ on('packsave',async()=>{const p=MG.importPreview;p.added=p.added||new Date().toISOString().slice(0,10);
+  try{
+   if(FS.writable){const fn=(MG.importName&&/\.json$/i.test(MG.importName)?MG.importName:p.id+'.json').replace(/[\\/:*?"<>|]/g,'_');await writePackToFolder(p,fn);await scanFolder(true);toast('📦 Paket im Ordner gespeichert: pakete/'+esc(fn))}
+   else{const ex=LS.get(LS_EXTRA)||{};ex[p.id]=p;LS.set(LS_EXTRA,ex);mergePacks();toast('📦 Paket übernommen: '+esc(p.title))}
+   MG.importPreview=null;MG.importName='';
+  }catch(e){MG.importErr='Speichern nicht möglich: '+esc(e.message||e.name)}
+  render()});
+ const pin=$('#pdfin');if(pin)pin.onchange=async()=>{const f0=pin.files[0];if(!f0)return;const f=new File([f0],f0.name,{type:'application/pdf',lastModified:Date.now()});MANUAL_PDF=f;await IDB.set('pdf',f);choosePdf();render()};
+}
+
+/* ======================= START ======================= */
+async function boot(){
+ const cached=LS.get(LS_SK);if(cached&&cached.index)SK=cached;rebuildNum();
+ CLOUD.packs=(await IDB.get('cloudpacks'))||{};CLOUD.pdf=await IDB.get('cloudpdf');
+ const mp=await IDB.get('pdf');if(mp&&mp.size)MANUAL_PDF=mp;
+ mergePacks();READY=true;render();
+ await restoreFolder();
+ touchDay();mergePacks();render();choosePdf();
+ if(sourceUrl())checkUpdates(false);
+}
+$('#dirin').onchange=async e=>{
+ const files=[...e.target.files];if(!files.length)return;
+ FS.state='readonly';FS.writable=false;FS.dir=null;FS.name=(files[0].webkitRelativePath||'').split('/')[0]||'Ordner';
+ await scanItems(files.map(f=>[(f.webkitRelativePath||f.name).split('/').slice(1).join('/')||f.name,{getFile:async()=>f}]),true);
+ toast('📁 Ordner „'+esc(FS.name)+'“ eingelesen');e.target.value='';
+};
+boot();
+</script>
+</body></html>
