@@ -641,7 +641,7 @@ document.addEventListener('keydown',e=>{if($('#vw').hidden)return;if(e.key==='Es
 /* Baut aus einem Skript-PDF das Verzeichnis aller Definitionen, Sätze, … auf */
 async function buildIndex(doc,onProgress){
  const index={},secTitle={};let toc=0;
- const HEAD=/^(Definition|Satz|Lemma|Korollar|Bemerkung|Beispiel)\s*(\d+(?:\s*\.\s*\d+)?)(?!\s*\.\d|\s*\d)\s*(\([^)]{0,80}\))?\s*\./;
+ const HEAD=/^(Definition|Satz|Lemma|Korollar|Bemerkung|Beispiel)\s*(\d+(?:\s*\.\s*\d+)?)(?!\s*\.\d|\s*\d)\s*(\((?:[^()]|\([^()]*\)){0,80}\))?\s*\./;
  for(let p=1;p<=doc.numPages;p++){
   if(onProgress)onProgress(p,doc.numPages);
   const tc=await (await doc.getPage(p)).getTextContent();
