@@ -163,6 +163,7 @@ textarea.inp{min-height:120px;font:13px/1.45 ui-monospace,Menlo,monospace}
 
 <script src="lib/katex/katex.min.js"></script>
 <script src="lib/katex/auto-render.min.js"></script>
+<script>/* Ersatz, falls der Ordner lib fehlt (z. B. nur die HTML-Datei heruntergeladen oder ZIP nicht entpackt) */if(!window.katex){window.LIB_FEHLT=true;document.write('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"><\/script><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"><\/script>')}addEventListener('load',function(){if(!window.katex){var d=document.createElement('div');d.textContent='⚠ Formeln können nicht angezeigt werden: Der Ordner „lib“ fehlt neben Lernspiel.html. Bitte die ZIP-Datei vollständig entpacken (Rechtsklick → Alle extrahieren) und Lernspiel.html aus dem entpackten Ordner öffnen – oder mit Internetverbindung starten.';d.style.cssText='position:fixed;left:0;right:0;bottom:0;z-index:9999;padding:12px 16px;background:#b45309;color:#fff;font:15px system-ui';document.body.appendChild(d)}});</script>
 <script>/* Grundausstattung – Pakete im Ordner „pakete“ haben Vorrang */
 window.LERNSPIEL_GRUNDPAKETE=/*PAKETE-ANFANG*/[]/*PAKETE-ENDE*/;</script>
 <script>
@@ -539,8 +540,8 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-ref]');if(
 const VW={list:[],i:0,page:1,zoom:1,tok:0,hl:null};
 let PDFP=null,PDFKEY=null;
 function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>rej(new Error(src));document.head.appendChild(s)})}
-async function loadPdfjs(){const base='lib/pdfjs/';
- if(!window.pdfjsLib)await loadScript(base+'pdf.min.js');
+async function loadPdfjs(){let base='lib/pdfjs/';
+ if(!window.pdfjsLib){try{await loadScript(base+'pdf.min.js')}catch(e){base='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';await loadScript(base+'pdf.min.js')}}
  if(!window.pdfjsWorker)await loadScript(base+'pdf.worker.min.js');
  pdfjsLib.GlobalWorkerOptions.workerSrc=base+'pdf.worker.min.js'}
 async function openPdfData(data){await loadPdfjs();return pdfjsLib.getDocument({data}).promise}
